@@ -27,7 +27,31 @@ import java.util.UUID;
  */
 public class Plot {
   
-  private String id;
+  /**
+   * @param id
+   * @param timestamp
+   * @param sensorID
+   * @param sensorPosition
+   * @param sensorObjectType
+   * @param targetID
+   * @param targetPosition
+   * @param targetType
+   */
+  public Plot( UUID id, Timestamp timestamp, UUID sensorID, Position sensorPosition, ObjectType sensorObjectType, UUID targetID,
+      Position targetPosition, ObjectType targetType ) {
+    super();
+    this.id = id;
+    this.timestamp = timestamp;
+    this.sensorID = sensorID;
+    this.sensorPosition = sensorPosition;
+    this.sensorObjectType = sensorObjectType;
+    this.targetID = targetID;
+    this.targetPosition = targetPosition;
+    this.targetType = targetType;
+  }
+
+
+  private UUID id;
   
   private Timestamp timestamp;
   
@@ -52,7 +76,7 @@ public class Plot {
    * Returns the id of this Plot.
    * @return the id of this Plot.
    */
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
@@ -61,7 +85,7 @@ public class Plot {
    * Sets the id of this Plot.
    * @param id the id to set.
    */
-  public void setId( String id ) {
+  public void setId( UUID id ) {
     this.id = id;
   }
 

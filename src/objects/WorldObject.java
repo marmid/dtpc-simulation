@@ -34,10 +34,10 @@ abstract class WorldObject {
    * @param position
    * @param type
    */
-  public WorldObject( World world, Position position, ObjectType type ) {
+  public WorldObject( World world, UUID id, Position position, ObjectType type ) {
     super();
     this.world = world;
-    this.id = UUID.randomUUID();
+    this.id = id;
     this.position = position;
     this.type = type;
   }

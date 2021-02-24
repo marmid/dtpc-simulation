@@ -20,6 +20,8 @@ package objects;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import types.ObjectType;
 import types.Plot;
@@ -39,21 +41,24 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * @param sensorArea
    * @param positions
    * @param plots
+   * @param commandQueue
    */
-  public SensorPlatform( World world, Position position, ObjectType type, SensorArea sensorArea, ArrayList< Position > positions,
-      ArrayList< Plot > plots ) {
-    super( world, position, type );
+  public SensorPlatform( World world, UUID id, Position position, ObjectType type, SensorArea sensorArea, ArrayList< Position > positions,
+      ArrayList< Plot > plots, ConcurrentLinkedQueue< String > commandQueue ) {
+    super( world, id, position, type );
     this.sensorArea = sensorArea;
     this.positions = positions;
     this.plots = plots;
+    this.commandQueue = commandQueue;
   }
-
 
   private SensorArea sensorArea;
   
   private ArrayList<Position> positions;
   
   private ArrayList<Plot> plots;
+  
+  private ConcurrentLinkedQueue<String> commandQueue;
 
 
   @Override
@@ -158,6 +163,24 @@ public class SensorPlatform extends WorldObject implements Runnable {
   @Override
   public String toString() {
     return "SensorPlatform [sensorArea=" + sensorArea + ", positions=" + positions + ", plots=" + plots + "]";
+  }
+
+  
+  /**
+   * Returns the commandQueue of this SensorPlatform.
+   * @return the commandQueue of this SensorPlatform.
+   */
+  public ConcurrentLinkedQueue< String > getCommandQueue() {
+    return commandQueue;
+  }
+
+  
+  /**
+   * Sets the commandQueue of this SensorPlatform.
+   * @param commandQueue the commandQueue to set.
+   */
+  public void setCommandQueue( ConcurrentLinkedQueue< String > commandQueue ) {
+    this.commandQueue = commandQueue;
   }
   
 

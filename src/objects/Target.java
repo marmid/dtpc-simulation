@@ -18,6 +18,8 @@
 
 package objects;
 
+import java.util.UUID;
+
 import types.ObjectType;
 import types.Position;
 
@@ -32,8 +34,8 @@ public class Target extends WorldObject {
    * @param position
    * @param type
    */
-  public Target( World world, Position position, ObjectType type ) {
-    super( world, position, type );
+  public Target( World world, UUID id, Position position, ObjectType type ) {
+    super( world, id, position, type );
     // TODO Auto-generated constructor stub
   }
 
