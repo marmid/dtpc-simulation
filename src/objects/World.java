@@ -34,8 +34,9 @@ public class World {
   
   private ArrayList<SensorPlatform> listOfSensorPlatforms;
   
-  public World() {
-    
+  public World(int width, int length) {
+    this.width = width;
+    this.length = length;
   }
 
   
@@ -108,6 +109,38 @@ public class World {
    */
   public void setListOfSensorPlatforms( ArrayList< SensorPlatform > listOfSensorPlatforms ) {
     this.listOfSensorPlatforms = listOfSensorPlatforms;
+  }
+  
+  /**
+   * Adds a Target to the listOfTargets
+   * @param target
+   */
+  public void addTarget(Target target) {
+    this.listOfTargets.add( target );
+  }
+  
+  /**
+   * Removes a Target from the listOfTargets
+   * @param target
+   */
+  public void removeTarget(Target target) {
+    this.listOfTargets.remove( target );
+  }
+  
+  /**
+   * Adds a SensorPlatform to the listOfSensorPlatforms
+   * @param sensorPlatform
+   */
+  public void addSensorPlatform(SensorPlatform sensorPlatform) {
+    this.listOfSensorPlatforms.add( sensorPlatform );
+  }
+  
+  /**
+   * Removes a SensorPlatform from the listOfSensorPlatforms
+   * @param sensorPlatform
+   */
+  public void removeSensorPlatform(SensorPlatform sensorPlatform) {
+    this.listOfSensorPlatforms.remove( sensorPlatform );
   }
 
 
