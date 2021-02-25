@@ -37,6 +37,8 @@ public class World {
   public World(int width, int length) {
     this.width = width;
     this.length = length;
+    this.listOfTargets = new ArrayList<Target>();
+    this.listOfSensorPlatforms = new ArrayList<SensorPlatform>();
   }
 
   

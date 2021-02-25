@@ -16,52 +16,17 @@
 //
 //============================================================================
 
-package objects;
+package main;
 
-import java.util.UUID;
-
-import types.ObjectType;
-import types.Position;
 
 /**
- * Defines the class Target.
+ * Defines the class SimulationStarter.
  */
-public class Target extends WorldObject {
-  
-  /**
-   * @param world
-   * @param id
-   * @param position
-   * @param type
-   */
-  public Target( World world, UUID id, Position position, ObjectType type ) {
-    super( world, id, position, type );
-  }
+public class SimulationStarter {
 
-  /** {@inheritDoc} */
-  @Override
-  public int hashCode() {
-    return super.hashCode();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public boolean equals( Object obj ) {
-    if( this == obj )
-      return true;
-    if( !super.equals( obj ) )
-      return false;
-    if( getClass() != obj.getClass() )
-      return false;
-    return true;
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public String toString() {
-    return "Target [id=" + id 
-        + ", position=" + position 
-        + ", type=" + type + "]";
+  public static void main( String[] args ) {
+    SimulationFramework simulation = new SimulationFramework();
+    simulation.init();
   }
 
 }

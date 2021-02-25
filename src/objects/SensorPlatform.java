@@ -162,7 +162,14 @@ public class SensorPlatform extends WorldObject implements Runnable {
   /** {@inheritDoc} */
   @Override
   public String toString() {
-    return "SensorPlatform [sensorArea=" + sensorArea + ", positions=" + positions + ", plots=" + plots + "]";
+    return "SensorPlatform ["
+        + "id=" + id 
+        + ", position=" + position  
+        + ", type=" + type
+        + ", sensorArea=" + sensorArea 
+        + ", positions=" + positions 
+        + ", plots=" + plots 
+        + ", commandQueue=" + commandQueue + "]";
   }
 
   

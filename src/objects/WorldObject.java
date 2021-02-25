@@ -27,7 +27,7 @@ import types.Position;
 /**
  * Defines the class WorldObject.
  */
-abstract class WorldObject {
+public class WorldObject {
   
   /**
    * @param world
@@ -43,13 +43,13 @@ abstract class WorldObject {
   }
 
 
-  private World world;
+  protected World world;
 
-  private UUID id;
+  protected UUID id;
 
-  private Position position;
+  protected Position position;
   
-  private ObjectType type;
+  protected ObjectType type;
 
   
   /**
@@ -127,8 +127,7 @@ abstract class WorldObject {
   /** {@inheritDoc} */
   @Override
   public String toString() {
-    return "WorldObject [world=" + world 
-        + ", id=" + id 
+    return "WorldObject [ id=" + id 
         + ", position=" + position 
         + ", type=" + type + "]";
   }

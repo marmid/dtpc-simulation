@@ -18,10 +18,18 @@
 
 package types;
 
+import java.util.Random;
 
 /**
  * Defines the class ObjectType.
  */
 public enum ObjectType {
-  TARGET1, TARGET2, TARGET3, SENSOR
+  TARGET1,
+  TARGET2,
+  TARGET3,
+  SENSOR;
+  
+  public static ObjectType getRandomTargetObjectType(Random random) {
+    return values()[random.nextInt(values().length - 1)];
+  }
 }

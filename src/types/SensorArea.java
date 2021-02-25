@@ -29,8 +29,9 @@ public class SensorArea {
   
   private int length;
   
-  public SensorArea() {
-    
+  public SensorArea(int width, int length) {
+    this.width = width;
+    this.length = length;
   }
 
   
