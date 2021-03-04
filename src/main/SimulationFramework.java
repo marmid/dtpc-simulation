@@ -23,12 +23,13 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import objects.SensorPlatform;
 import objects.Target;
 import objects.World;
-import objects.WorldObject;
 import types.ControlCommand;
 import types.ObjectType;
 import types.Position;
+import types.SensorArea;
 
 /**
  * Defines the class SimulationFramework.
@@ -55,16 +56,17 @@ public class SimulationFramework {
 
   private World world;
 
-  private ArrayList< ConcurrentLinkedQueue > listOfCommandQueues;
+  private ArrayList< ConcurrentLinkedQueue<ControlCommand> > listOfCommandQueues;
 
   private ArrayList< ControlCommand > storyBook;
-  
+
   public SimulationFramework() {
-    
+
   }
 
   public void init() {
-    random = new Random( SEED );
+    this.random = new Random( SEED );
+    this.listOfCommandQueues = new ArrayList<ConcurrentLinkedQueue< ControlCommand >>();
     createWorld( WORLD_WIDTH, WORLD_LENGTH );
     createTargets();
     createSensorPlatforms();
@@ -77,14 +79,62 @@ public class SimulationFramework {
 
   public void createTargets() {
     for( int i = 0; i < NUMBER_OF_TARGETS; i++ ) {
-      Target target = new Target( this.world, getID(), createRandomPosition(), giveRandomTargetObjectType() );
+      Target target = new Target( this.world, getID(), 
+                                  createRandomPosition(), 
+                                  giveRandomTargetObjectType() );
       System.out.println( target.toString() );
       this.world.addTarget( target );
-      
+
     }
   }
 
   public void createSensorPlatforms() {
+
+    /*
+     * create first sensor platform
+     */
+    ConcurrentLinkedQueue< ControlCommand > commandQueue1 = new ConcurrentLinkedQueue<>();
+    this.listOfCommandQueues.add( commandQueue1 );
+    SensorPlatform sensor1 = new SensorPlatform( this.world, 
+                                                 getID(), 
+                                                 new Position( 250, 0 ), 
+                                                 ObjectType.SENSOR,
+                                                 new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), 
+                                                 new ArrayList< Position >(), 
+                                                 commandQueue1 );
+    this.world.addSensorPlatform( sensor1 );
+    System.out.println( sensor1.toString() );
+    
+    /*
+     * create second sensor platform
+     */
+    ConcurrentLinkedQueue< ControlCommand > commandQueue2 = new ConcurrentLinkedQueue<>();
+    this.listOfCommandQueues.add( commandQueue2 );
+    SensorPlatform sensor2 = new SensorPlatform( this.world, 
+                                                 getID(), 
+                                                 new Position( 500, 0 ), 
+                                                 ObjectType.SENSOR,
+                                                 new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), 
+                                                 new ArrayList< Position >(), 
+                                                 commandQueue2 );
+    this.world.addSensorPlatform( sensor2 );
+    System.out.println( sensor2.toString() );
+
+    
+    /*
+     * create third sensor platform
+     */
+    ConcurrentLinkedQueue< ControlCommand > commandQueue3 = new ConcurrentLinkedQueue<>();
+    this.listOfCommandQueues.add( commandQueue3 );
+    SensorPlatform sensor3 = new SensorPlatform( this.world, 
+                                                 getID(), 
+                                                 new Position( 750, 0 ), 
+                                                 ObjectType.SENSOR,
+                                                 new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), 
+                                                 new ArrayList< Position >(), 
+                                                 commandQueue3 );
+    this.world.addSensorPlatform( sensor3 );
+    System.out.println( sensor3.toString() );
 
   }
 
@@ -93,8 +143,8 @@ public class SimulationFramework {
   }
 
   public Position createRandomPosition() {
-    int x = random.nextInt( (WORLD_WIDTH - RANDOM_MINIMUM) + 1 ) + RANDOM_MINIMUM;
-    int y = random.nextInt( (WORLD_LENGTH - RANDOM_MINIMUM) + 1 ) + RANDOM_MINIMUM;
+    int x = this.random.nextInt( (WORLD_WIDTH - RANDOM_MINIMUM) + 1 ) + RANDOM_MINIMUM;
+    int y = this.random.nextInt( (WORLD_LENGTH - RANDOM_MINIMUM) + 1 ) + RANDOM_MINIMUM;
     return new Position( x, y );
   }
 
@@ -104,7 +154,7 @@ public class SimulationFramework {
 
   public UUID getID() {
     byte[] array = new byte[16];
-    random.nextBytes( array );
+    this.random.nextBytes( array );
     return UUID.nameUUIDFromBytes( array );
   }
 

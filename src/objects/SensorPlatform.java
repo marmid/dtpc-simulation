@@ -18,11 +18,14 @@
 
 package objects;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import types.ControlCommand;
 import types.ObjectType;
 import types.Plot;
 import types.Position;
@@ -32,6 +35,16 @@ import types.SensorArea;
  * Defines the class SensorPlatform.
  */
 public class SensorPlatform extends WorldObject implements Runnable {
+
+  private SensorArea sensorArea;
+  
+  private ArrayList<Position> positions;
+  
+  private ArrayList<Position> visitedPositions;
+  
+  private ArrayList<Plot> plots;
+  
+  private ConcurrentLinkedQueue<ControlCommand> commandQueue;
   
   /**
    * @param world
@@ -43,22 +56,16 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * @param plots
    * @param commandQueue
    */
-  public SensorPlatform( World world, UUID id, Position position, ObjectType type, SensorArea sensorArea, ArrayList< Position > positions,
-      ArrayList< Plot > plots, ConcurrentLinkedQueue< String > commandQueue ) {
+  public SensorPlatform( World world, UUID id, Position position, 
+      ObjectType type, SensorArea sensorArea, ArrayList< Position > positions, 
+      ConcurrentLinkedQueue< ControlCommand > commandQueue ) {
     super( world, id, position, type );
     this.sensorArea = sensorArea;
     this.positions = positions;
-    this.plots = plots;
     this.commandQueue = commandQueue;
+    this.plots = new ArrayList<Plot>();
+    this.visitedPositions = new ArrayList<Position>();
   }
-
-  private SensorArea sensorArea;
-  
-  private ArrayList<Position> positions;
-  
-  private ArrayList<Plot> plots;
-  
-  private ConcurrentLinkedQueue<String> commandQueue;
 
 
   @Override
@@ -68,11 +75,37 @@ public class SensorPlatform extends WorldObject implements Runnable {
   }
   
   public void sense() {
-    
+    ArrayList<Target> worldTargets = this.world.getListOfTargets();
+    int xLowerBound = this.getPosition().getX() - this.getSensorArea().getWidth()/2;
+    int xUpperBound = this.getPosition().getX() + this.getSensorArea().getWidth()/2;
+    int yLowerBound = this.getPosition().getY() - this.getSensorArea().getLength()/2;
+    int yUpperBound = this.getPosition().getY() + this.getSensorArea().getLength()/2;
+    for(Target target : worldTargets){
+      int targetX = target.getPosition().getX();
+      int targetY = target.getPosition().getY();
+      if(targetX >= xLowerBound && targetX <= xUpperBound &&
+          targetY >= yLowerBound && targetY <= yUpperBound) {
+        Plot plot = new Plot(UUID.randomUUID(), 
+                             Timestamp.valueOf( LocalDateTime.now() ),
+                             this.getId(),
+                             this.getPosition(),
+                             this.getType(),
+                             target.getId(),
+                             target.getPosition(),
+                             target.getType());
+        this.plots.add( plot );
+        
+      }
+    }
   }
   
   public void updatePosition() {
-    
+    if( !this.positions.isEmpty() ) {
+      this.visitedPositions.add( this.position );
+      Position nextPosition = this.positions.get( 0 );
+      this.setPosition( nextPosition );
+      this.positions.remove( nextPosition );
+    }
   }
   
   public void connect() {
@@ -177,7 +210,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * Returns the commandQueue of this SensorPlatform.
    * @return the commandQueue of this SensorPlatform.
    */
-  public ConcurrentLinkedQueue< String > getCommandQueue() {
+  public ConcurrentLinkedQueue< ControlCommand > getCommandQueue() {
     return commandQueue;
   }
 
@@ -186,7 +219,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * Sets the commandQueue of this SensorPlatform.
    * @param commandQueue the commandQueue to set.
    */
-  public void setCommandQueue( ConcurrentLinkedQueue< String > commandQueue ) {
+  public void setCommandQueue( ConcurrentLinkedQueue< ControlCommand > commandQueue ) {
     this.commandQueue = commandQueue;
   }
   

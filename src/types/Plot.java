@@ -39,7 +39,6 @@ public class Plot {
    */
   public Plot( UUID id, Timestamp timestamp, UUID sensorID, Position sensorPosition, ObjectType sensorObjectType, UUID targetID,
       Position targetPosition, ObjectType targetType ) {
-    super();
     this.id = id;
     this.timestamp = timestamp;
     this.sensorID = sensorID;
@@ -66,10 +65,6 @@ public class Plot {
   private Position targetPosition;
   
   private ObjectType targetType;
-  
-  public Plot() {
-    
-  }
 
   
   /**
