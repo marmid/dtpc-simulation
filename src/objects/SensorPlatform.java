@@ -85,6 +85,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
           case START_MOVING:
             if( currentKinematicState.equals( KinematicState.STARTED ) ) {
               this.currentKinematicState = KinematicState.MOVING;
+              System.out.println( "Sensor Platform " + this.getId() + " starts moving." );
             }
             break;
           case STOP_MOVING:
@@ -92,17 +93,20 @@ public class SensorPlatform extends WorldObject implements Runnable {
                 currentKinematicState.equals( KinematicState.STARTED )
                 || currentKinematicState.equals( KinematicState.PAUSED ) ) {
               this.currentKinematicState = KinematicState.FINISHED;
+              System.out.println( "Sensor Platform " + this.getId() + " stops moving." );
             }
             break;
           case PAUSE_MOVING:
             if( currentKinematicState.equals( KinematicState.STARTED ) || 
                 currentKinematicState.equals( KinematicState.MOVING ) ) {
               this.currentKinematicState = KinematicState.PAUSED;
+              System.out.println( "Sensor Platform " + this.getId() + " pauses moving." );
             }
             break;
           case RESUME_MOVING:
             if( currentKinematicState.equals( KinematicState.PAUSED ) ) {
               this.currentKinematicState = KinematicState.MOVING;
+              System.out.println( "Sensor Platform " + this.getId() + " resumes moving." );
             }
             break;
           case CONNECT:
@@ -167,6 +171,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
     } else {
       this.currentKinematicState = KinematicState.FINISHED;
       System.out.println( "Sensor Platform " + this.getId() + " finished." );
+      doStop();
     }
   }
 
@@ -276,7 +281,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * 
    * @return the commandQueue of this SensorPlatform.
    */
-  public ConcurrentLinkedQueue< ControlCommand > getCommandQueue() {
+  public synchronized ConcurrentLinkedQueue< ControlCommand > getCommandQueue() {
     return commandQueue;
   }
 
@@ -285,7 +290,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * 
    * @param commandQueue the commandQueue to set.
    */
-  public void setCommandQueue( ConcurrentLinkedQueue< ControlCommand > commandQueue ) {
+  public synchronized void setCommandQueue( ConcurrentLinkedQueue< ControlCommand > commandQueue ) {
     this.commandQueue = commandQueue;
   }
 

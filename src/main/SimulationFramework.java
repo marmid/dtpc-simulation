@@ -27,6 +27,7 @@ import objects.SensorPlatform;
 import objects.Target;
 import objects.World;
 import types.ControlCommand;
+import types.ControlCommandType;
 import types.ObjectType;
 import types.Position;
 import types.SensorArea;
@@ -97,6 +98,23 @@ public class SimulationFramework {
     /*
      * create first sensor platform
      */
+    ArrayList<Position> positions1 = new ArrayList<>();
+    positions1.add( new Position(250, 200) );
+    positions1.add( new Position(250, 400) );
+    positions1.add( new Position(250, 600) );
+    positions1.add( new Position(250, 800) );
+    positions1.add( new Position(250, 1000) );
+    positions1.add( new Position(250, 1200) );
+    positions1.add( new Position(250, 1400) );
+    positions1.add( new Position(250, 1600) );
+    positions1.add( new Position(250, 1800) );
+    positions1.add( new Position(250, 2000) );
+    positions1.add( new Position(250, 2200) );
+    positions1.add( new Position(250, 2400) );
+    positions1.add( new Position(250, 2600) );
+    positions1.add( new Position(250, 2800) );
+    positions1.add( new Position(250, 3000) );
+    
     ConcurrentLinkedQueue< ControlCommand > commandQueue1 = new ConcurrentLinkedQueue<>();
     this.listOfCommandQueues.add( commandQueue1 );
     SensorPlatform sensor1 = new SensorPlatform( this.world, 
@@ -104,7 +122,7 @@ public class SimulationFramework {
                                                  new Position( 250, 0 ), 
                                                  ObjectType.SENSOR,
                                                  new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), 
-                                                 new ArrayList< Position >(), 
+                                                 positions1, 
                                                  commandQueue1 );
     this.world.addSensorPlatform( sensor1 );
     System.out.println( sensor1.toString() );
@@ -112,6 +130,23 @@ public class SimulationFramework {
     /*
      * create second sensor platform
      */
+    ArrayList<Position> positions2 = new ArrayList<>();
+    positions2.add( new Position(500, 200) );
+    positions2.add( new Position(500, 400) );
+    positions2.add( new Position(500, 600) );
+    positions2.add( new Position(500, 800) );
+    positions2.add( new Position(500, 1000) );
+    positions2.add( new Position(500, 1200) );
+    positions2.add( new Position(500, 1400) );
+    positions2.add( new Position(500, 1600) );
+    positions2.add( new Position(500, 1800) );
+    positions2.add( new Position(500, 2000) );
+    positions2.add( new Position(500, 2200) );
+    positions2.add( new Position(500, 2400) );
+    positions2.add( new Position(500, 2600) );
+    positions2.add( new Position(500, 2800) );
+    positions2.add( new Position(500, 3000) );
+    
     ConcurrentLinkedQueue< ControlCommand > commandQueue2 = new ConcurrentLinkedQueue<>();
     this.listOfCommandQueues.add( commandQueue2 );
     SensorPlatform sensor2 = new SensorPlatform( this.world, 
@@ -119,7 +154,7 @@ public class SimulationFramework {
                                                  new Position( 500, 0 ), 
                                                  ObjectType.SENSOR,
                                                  new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), 
-                                                 new ArrayList< Position >(), 
+                                                 positions2, 
                                                  commandQueue2 );
     this.world.addSensorPlatform( sensor2 );
     System.out.println( sensor2.toString() );
@@ -128,6 +163,23 @@ public class SimulationFramework {
     /*
      * create third sensor platform
      */
+    ArrayList<Position> positions3 = new ArrayList<>();
+    positions3.add( new Position(750, 200) );
+    positions3.add( new Position(750, 400) );
+    positions3.add( new Position(750, 600) );
+    positions3.add( new Position(750, 800) );
+    positions3.add( new Position(750, 1000) );
+    positions3.add( new Position(750, 1200) );
+    positions3.add( new Position(750, 1400) );
+    positions3.add( new Position(750, 1600) );
+    positions3.add( new Position(750, 1800) );
+    positions3.add( new Position(750, 2000) );
+    positions3.add( new Position(750, 2200) );
+    positions3.add( new Position(750, 2400) );
+    positions3.add( new Position(750, 2600) );
+    positions3.add( new Position(750, 2800) );
+    positions3.add( new Position(750, 3000) );
+    
     ConcurrentLinkedQueue< ControlCommand > commandQueue3 = new ConcurrentLinkedQueue<>();
     this.listOfCommandQueues.add( commandQueue3 );
     SensorPlatform sensor3 = new SensorPlatform( this.world, 
@@ -135,7 +187,7 @@ public class SimulationFramework {
                                                  new Position( 750, 0 ), 
                                                  ObjectType.SENSOR,
                                                  new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), 
-                                                 new ArrayList< Position >(), 
+                                                 positions3, 
                                                  commandQueue3 );
     this.world.addSensorPlatform( sensor3 );
     System.out.println( sensor3.toString() );
@@ -152,7 +204,11 @@ public class SimulationFramework {
   }
 
   public void startSimulation() {
-    
+    for(SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
+      ControlCommand command = new ControlCommand( sensor, ControlCommandType.START_MOVING);
+      ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
+      commandQueue.offer( command );
+    }
   }
 
   public Position createRandomPosition() {
