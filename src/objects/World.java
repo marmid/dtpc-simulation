@@ -46,7 +46,7 @@ public class World {
    * Returns the width of this World.
    * @return the width of this World.
    */
-  public int getWidth() {
+  public synchronized int getWidth() {
     return width;
   }
 
@@ -55,7 +55,7 @@ public class World {
    * Sets the width of this World.
    * @param width the width to set.
    */
-  public void setWidth( int width ) {
+  public synchronized void setWidth( int width ) {
     this.width = width;
   }
 
@@ -64,7 +64,7 @@ public class World {
    * Returns the length of this World.
    * @return the length of this World.
    */
-  public int getLength() {
+  public synchronized int getLength() {
     return length;
   }
 
@@ -73,7 +73,7 @@ public class World {
    * Sets the length of this World.
    * @param length the length to set.
    */
-  public void setLength( int length ) {
+  public synchronized void setLength( int length ) {
     this.length = length;
   }
 
@@ -82,7 +82,7 @@ public class World {
    * Returns the listOfTargets of this World.
    * @return the listOfTargets of this World.
    */
-  public ArrayList< Target > getListOfTargets() {
+  public synchronized ArrayList< Target > getListOfTargets() {
     return listOfTargets;
   }
 
@@ -91,7 +91,7 @@ public class World {
    * Sets the listOfTargets of this World.
    * @param listOfTargets the listOfTargets to set.
    */
-  public void setListOfTargets( ArrayList< Target > listOfTargets ) {
+  public synchronized void setListOfTargets( ArrayList< Target > listOfTargets ) {
     this.listOfTargets = listOfTargets;
   }
 
@@ -100,7 +100,7 @@ public class World {
    * Returns the listOfSensorPlatforms of this World.
    * @return the listOfSensorPlatforms of this World.
    */
-  public ArrayList< SensorPlatform > getListOfSensorPlatforms() {
+  public synchronized ArrayList< SensorPlatform > getListOfSensorPlatforms() {
     return listOfSensorPlatforms;
   }
 
@@ -109,7 +109,7 @@ public class World {
    * Sets the listOfSensorPlatforms of this World.
    * @param listOfSensorPlatforms the listOfSensorPlatforms to set.
    */
-  public void setListOfSensorPlatforms( ArrayList< SensorPlatform > listOfSensorPlatforms ) {
+  public synchronized void setListOfSensorPlatforms( ArrayList< SensorPlatform > listOfSensorPlatforms ) {
     this.listOfSensorPlatforms = listOfSensorPlatforms;
   }
   
@@ -117,7 +117,7 @@ public class World {
    * Adds a Target to the listOfTargets
    * @param target
    */
-  public void addTarget(Target target) {
+  public synchronized void addTarget(Target target) {
     this.listOfTargets.add( target );
   }
   
@@ -125,7 +125,7 @@ public class World {
    * Removes a Target from the listOfTargets
    * @param target
    */
-  public void removeTarget(Target target) {
+  public synchronized void removeTarget(Target target) {
     this.listOfTargets.remove( target );
   }
   
@@ -133,7 +133,7 @@ public class World {
    * Adds a SensorPlatform to the listOfSensorPlatforms
    * @param sensorPlatform
    */
-  public void addSensorPlatform(SensorPlatform sensorPlatform) {
+  public synchronized void addSensorPlatform(SensorPlatform sensorPlatform) {
     this.listOfSensorPlatforms.add( sensorPlatform );
   }
   
@@ -141,7 +141,7 @@ public class World {
    * Removes a SensorPlatform from the listOfSensorPlatforms
    * @param sensorPlatform
    */
-  public void removeSensorPlatform(SensorPlatform sensorPlatform) {
+  public synchronized void removeSensorPlatform(SensorPlatform sensorPlatform) {
     this.listOfSensorPlatforms.remove( sensorPlatform );
   }
 

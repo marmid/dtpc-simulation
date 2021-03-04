@@ -59,6 +59,8 @@ public class SimulationFramework {
   private ArrayList< ConcurrentLinkedQueue<ControlCommand> > listOfCommandQueues;
 
   private ArrayList< ControlCommand > storyBook;
+  
+  private ArrayList< Thread > listOfThreads;
 
   public SimulationFramework() {
 
@@ -67,9 +69,11 @@ public class SimulationFramework {
   public void init() {
     this.random = new Random( SEED );
     this.listOfCommandQueues = new ArrayList<ConcurrentLinkedQueue< ControlCommand >>();
+    this.listOfThreads = new ArrayList<Thread>();
     createWorld( WORLD_WIDTH, WORLD_LENGTH );
     createTargets();
     createSensorPlatforms();
+    startSensorPlatformThreads();
   }
 
   public void createWorld( int width, int length ) {
@@ -138,8 +142,17 @@ public class SimulationFramework {
 
   }
 
-  public void startSensorPlatforms() {
+  public void startSensorPlatformThreads() {
+    for(SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
+      Thread thread = new Thread(sensor, sensor.getId().toString());
+      System.out.println( "Thread " + thread.getName() + " started." );
+      thread.start();
+      this.listOfThreads.add( thread );
+    }
+  }
 
+  public void startSimulation() {
+    
   }
 
   public Position createRandomPosition() {

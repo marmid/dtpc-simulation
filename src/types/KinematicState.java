@@ -16,19 +16,12 @@
 //
 //============================================================================
 
-package main;
+package types;
 
 
 /**
- * Defines the class SimulationStarter.
+ * Defines the enum KinematicState.
  */
-public class SimulationStarter {
-
-  public static void main( String[] args ) {
-    SimulationFramework simulation = new SimulationFramework();
-    simulation.init();
-    
-    simulation.startSimulation();
-  }
-
+public enum KinematicState {
+  MOVING, STARTED, FINISHED, PAUSED, ON_GROUND;
 }
