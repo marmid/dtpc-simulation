@@ -16,21 +16,24 @@
 //
 //============================================================================
 
-package main;
+package main.java.simulation;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import objects.SensorPlatform;
-import objects.Target;
-import objects.World;
-import types.ControlCommand;
-import types.ControlCommandType;
-import types.ObjectType;
-import types.Position;
-import types.SensorArea;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import main.java.objects.SensorPlatform;
+import main.java.objects.Target;
+import main.java.objects.World;
+import main.java.types.ControlCommand;
+import main.java.types.ControlCommandType;
+import main.java.types.ObjectType;
+import main.java.types.Position;
+import main.java.types.SensorArea;
 
 /**
  * Defines the class SimulationFramework.
@@ -52,6 +55,8 @@ public class SimulationFramework {
   private static final int SEED = 1614267322;
 
   private static final int RANDOM_MINIMUM = 0;
+  
+  private static Logger logger = LoggerFactory.getLogger(SimulationFramework.class);
 
   private Random random;
 
@@ -79,7 +84,7 @@ public class SimulationFramework {
 
   public void createWorld( int width, int length ) {
     this.world = new World( width, length );
-    System.out.println( this.world.toString() );
+    logger.info( this.world.toString() );
   }
 
   public void createTargets() {
@@ -87,7 +92,7 @@ public class SimulationFramework {
       Target target = new Target( this.world, getID(), 
                                   createRandomPosition(), 
                                   giveRandomTargetObjectType() );
-      System.out.println( target.toString() );
+      logger.info( target.toString() );
       this.world.addTarget( target );
 
     }
@@ -125,7 +130,7 @@ public class SimulationFramework {
                                                  positions1, 
                                                  commandQueue1 );
     this.world.addSensorPlatform( sensor1 );
-    System.out.println( sensor1.toString() );
+    logger.info( sensor1.toString() );
     
     /*
      * create second sensor platform
@@ -157,7 +162,7 @@ public class SimulationFramework {
                                                  positions2, 
                                                  commandQueue2 );
     this.world.addSensorPlatform( sensor2 );
-    System.out.println( sensor2.toString() );
+    logger.info( sensor2.toString() );
 
     
     /*
@@ -190,14 +195,14 @@ public class SimulationFramework {
                                                  positions3, 
                                                  commandQueue3 );
     this.world.addSensorPlatform( sensor3 );
-    System.out.println( sensor3.toString() );
+    logger.info( sensor3.toString() );
 
   }
 
   public void startSensorPlatformThreads() {
     for(SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
       Thread thread = new Thread(sensor, sensor.getId().toString());
-      System.out.println( "Thread " + thread.getName() + " started." );
+      logger.info( "Thread " + thread.getName() + " started." );
       thread.start();
       this.listOfThreads.add( thread );
     }

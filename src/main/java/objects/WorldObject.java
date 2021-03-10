@@ -16,13 +16,13 @@
 //
 //============================================================================
 
-package objects;
+package main.java.objects;
 
 import java.util.Objects;
 import java.util.UUID;
 
-import types.ObjectType;
-import types.Position;
+import main.java.types.ObjectType;
+import main.java.types.Position;
 
 /**
  * Defines the class WorldObject.

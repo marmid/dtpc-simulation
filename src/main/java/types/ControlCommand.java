@@ -16,11 +16,11 @@
 //
 //============================================================================
 
-package types;
+package main.java.types;
 
 import java.util.Objects;
 
-import objects.SensorPlatform;
+import main.java.objects.SensorPlatform;
 
 /**
  * Defines the class ControlCommand.

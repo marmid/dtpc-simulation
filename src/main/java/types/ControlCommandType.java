@@ -16,12 +16,12 @@
 //
 //============================================================================
 
-package types;
+package main.java.types;
 
 
 /**
- * Defines the enum KinematicState.
+ * Defines the class Commands.
  */
-public enum KinematicState {
-  MOVING, STARTED, FINISHED, PAUSED, ON_GROUND;
+public enum ControlCommandType {
+  START_MOVING, PAUSE_MOVING, RESUME_MOVING, STOP_MOVING, CONNECT, DISCONNECT
 }

@@ -16,7 +16,7 @@
 //
 //============================================================================
 
-package objects;
+package main.java.objects;
 
 import java.util.ArrayList;
 import java.util.Objects;

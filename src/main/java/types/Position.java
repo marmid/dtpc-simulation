@@ -16,72 +16,65 @@
 //
 //============================================================================
 
-package types;
+package main.java.types;
 
 import java.util.Objects;
 
 /**
- * Defines the class SensorArea.
+ * Defines the class Position.
  */
-public class SensorArea {
+public class Position {
   
-  private int width;
+  private int x;
   
-  private int length;
+  private int y;
   
-  public SensorArea(int width, int length) {
-    this.width = width;
-    this.length = length;
+  public Position(int x, int y) {
+    this.x = x;
+    this.y = y;
   }
 
   
   /**
-   * Returns the width of this SensorArea.
-   * @return the width of this SensorArea.
+   * Returns the x of this Position.
+   * @return the x of this Position.
    */
-  public int getWidth() {
-    return width;
+  public int getX() {
+    return x;
   }
 
   
   /**
-   * Sets the width of this SensorArea.
-   * @param width the width to set.
+   * Sets the x of this Position.
+   * @param x the x to set.
    */
-  public void setWidth( int width ) {
-    this.width = width;
+  public void setX( int x ) {
+    this.x = x;
   }
 
   
   /**
-   * Returns the length of this SensorArea.
-   * @return the length of this SensorArea.
+   * Returns the y of this Position.
+   * @return the y of this Position.
    */
-  public int getLength() {
-    return length;
+  public int getY() {
+    return y;
   }
 
   
   /**
-   * Sets the length of this SensorArea.
-   * @param length the length to set.
+   * Sets the y of this Position.
+   * @param y the y to set.
    */
-  public void setLength( int length ) {
-    this.length = length;
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public String toString() {
-    return "SensorArea [width=" + width + ", length=" + length + "]";
+  public void setY( int y ) {
+    this.y = y;
   }
 
 
   /** {@inheritDoc} */
   @Override
   public int hashCode() {
-    return Objects.hash( length, width );
+    return Objects.hash( x, y );
   }
 
 
@@ -94,8 +87,15 @@ public class SensorArea {
       return false;
     if( getClass() != obj.getClass() )
       return false;
-    SensorArea other = (SensorArea)obj;
-    return length == other.length && width == other.width;
+    Position other = (Position)obj;
+    return x == other.x && y == other.y;
+  }
+
+
+  /** {@inheritDoc} */
+  @Override
+  public String toString() {
+    return "Position [x=" + x + ", y=" + y + "]";
   }
 
 }

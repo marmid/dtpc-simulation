@@ -16,7 +16,7 @@
 //
 //============================================================================
 
-package objects;
+package main.java.objects;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -25,17 +25,23 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import types.ControlCommand;
-import types.KinematicState;
-import types.ObjectType;
-import types.Plot;
-import types.Position;
-import types.SensorArea;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import main.java.simulation.SimulationFramework;
+import main.java.types.ControlCommand;
+import main.java.types.KinematicState;
+import main.java.types.ObjectType;
+import main.java.types.Plot;
+import main.java.types.Position;
+import main.java.types.SensorArea;
 
 /**
  * Defines the class SensorPlatform.
  */
 public class SensorPlatform extends WorldObject implements Runnable {
+  
+  private static Logger logger = LoggerFactory.getLogger(SensorPlatform.class);
 
   private SensorArea sensorArea;
 
@@ -75,7 +81,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
   public void run() {
     // TODO Auto-generated method stub
     Thread thread = Thread.currentThread();
-    System.out.println( "Thread " + thread.getName() + " run method." );
+    logger.info( "Thread " + thread.getName() + " run method." );
     this.currentKinematicState = KinematicState.STARTED;
     while( keepRunning() ) {
       if( this.commandQueue.peek() != null  ) {
@@ -85,7 +91,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
           case START_MOVING:
             if( currentKinematicState.equals( KinematicState.STARTED ) ) {
               this.currentKinematicState = KinematicState.MOVING;
-              System.out.println( "Sensor Platform " + this.getId() + " starts moving." );
+              logger.info( "Sensor Platform " + this.getId() + " starts moving." );
             }
             break;
           case STOP_MOVING:
@@ -93,20 +99,20 @@ public class SensorPlatform extends WorldObject implements Runnable {
                 currentKinematicState.equals( KinematicState.STARTED )
                 || currentKinematicState.equals( KinematicState.PAUSED ) ) {
               this.currentKinematicState = KinematicState.FINISHED;
-              System.out.println( "Sensor Platform " + this.getId() + " stops moving." );
+              logger.info( "Sensor Platform " + this.getId() + " stops moving." );
             }
             break;
           case PAUSE_MOVING:
             if( currentKinematicState.equals( KinematicState.STARTED ) || 
                 currentKinematicState.equals( KinematicState.MOVING ) ) {
               this.currentKinematicState = KinematicState.PAUSED;
-              System.out.println( "Sensor Platform " + this.getId() + " pauses moving." );
+              logger.info( "Sensor Platform " + this.getId() + " pauses moving." );
             }
             break;
           case RESUME_MOVING:
             if( currentKinematicState.equals( KinematicState.PAUSED ) ) {
               this.currentKinematicState = KinematicState.MOVING;
-              System.out.println( "Sensor Platform " + this.getId() + " resumes moving." );
+              logger.info( "Sensor Platform " + this.getId() + " resumes moving." );
             }
             break;
           case CONNECT:
@@ -155,7 +161,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
                               target.getPosition(), 
                               target.getType() );
         this.plots.add( plot );
-        System.out.println( "Sensor Platform " + this.getId() + ": new Plot: " + plot );
+        logger.info( "Sensor Platform " + this.getId() + ": new Plot: " + plot );
 
       }
     }
@@ -167,21 +173,21 @@ public class SensorPlatform extends WorldObject implements Runnable {
       Position nextPosition = this.positions.get( 0 );
       this.setPosition( nextPosition );
       this.positions.remove( nextPosition );
-      System.out.println( "Sensor Platform " + this.getId() + ": new Position: " + this.getPosition() );
+      logger.info( "Sensor Platform " + this.getId() + ": new Position: " + this.getPosition() );
     } else {
       this.currentKinematicState = KinematicState.FINISHED;
-      System.out.println( "Sensor Platform " + this.getId() + " finished." );
+      logger.info( "Sensor Platform " + this.getId() + " finished." );
       doStop();
     }
   }
 
   public void connect() {
-    System.out.println( "Sensor Platform " + this.getId() + " connect." );
+    logger.info( "Sensor Platform " + this.getId() + " connect." );
 
   }
 
   public void disconnect() {
-    System.out.println( "Sensor Platform " + this.getId() + " disconnect." );
+    logger.info( "Sensor Platform " + this.getId() + " disconnect." );
 
   }
 

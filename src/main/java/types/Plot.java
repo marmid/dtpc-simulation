@@ -16,7 +16,7 @@
 //
 //============================================================================
 
-package types;
+package main.java.types;
 
 import java.sql.Timestamp;
 import java.util.Objects;

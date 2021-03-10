@@ -16,20 +16,12 @@
 //
 //============================================================================
 
-package types;
+package main.java.types;
 
-import java.util.Random;
 
 /**
- * Defines the class ObjectType.
+ * Defines the enum KinematicState.
  */
-public enum ObjectType {
-  TARGET1,
-  TARGET2,
-  TARGET3,
-  SENSOR;
-  
-  public static ObjectType getRandomTargetObjectType(Random random) {
-    return values()[random.nextInt(values().length - 1)];
-  }
+public enum KinematicState {
+  MOVING, STARTED, FINISHED, PAUSED, ON_GROUND;
 }

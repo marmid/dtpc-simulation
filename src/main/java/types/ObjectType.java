@@ -16,12 +16,20 @@
 //
 //============================================================================
 
-package types;
+package main.java.types;
 
+import java.util.Random;
 
 /**
- * Defines the class Commands.
+ * Defines the class ObjectType.
  */
-public enum ControlCommandType {
-  START_MOVING, PAUSE_MOVING, RESUME_MOVING, STOP_MOVING, CONNECT, DISCONNECT
+public enum ObjectType {
+  TARGET1,
+  TARGET2,
+  TARGET3,
+  SENSOR;
+  
+  public static ObjectType getRandomTargetObjectType(Random random) {
+    return values()[random.nextInt(values().length - 1)];
+  }
 }
