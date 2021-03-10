@@ -35,6 +35,8 @@ public class SimulationStarter {
     simulation.init();
     
     simulation.startSimulation();
+    
+    simulation.joinThreads();
   }
 
 }

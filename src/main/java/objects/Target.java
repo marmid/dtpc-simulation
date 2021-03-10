@@ -28,6 +28,8 @@ import main.java.types.Position;
  */
 public class Target extends WorldObject {
   
+  private Boolean hasBeenDetected = false;
+  
   /**
    * @param world
    * @param id
@@ -62,6 +64,24 @@ public class Target extends WorldObject {
     return "Target [id=" + id 
         + ", position=" + position 
         + ", type=" + type + "]";
+  }
+
+  
+  /**
+   * Returns the hasBeenDetected of this Target.
+   * @return the hasBeenDetected of this Target.
+   */
+  public synchronized Boolean getHasBeenDetected() {
+    return hasBeenDetected;
+  }
+
+  
+  /**
+   * Sets the hasBeenDetected of this Target.
+   * @param hasBeenDetected the hasBeenDetected to set.
+   */
+  public synchronized void setHasBeenDetected( Boolean hasBeenDetected ) {
+    this.hasBeenDetected = hasBeenDetected;
   }
 
 }

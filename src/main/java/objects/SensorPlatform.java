@@ -28,6 +28,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.netopyr.wurmloch.crdt.GSet;
+import com.netopyr.wurmloch.store.CrdtStore;
+import com.netopyr.wurmloch.store.LocalCrdtStore;
+
 import main.java.simulation.SimulationFramework;
 import main.java.types.ControlCommand;
 import main.java.types.KinematicState;
@@ -50,6 +54,10 @@ public class SensorPlatform extends WorldObject implements Runnable {
   private ArrayList< Position > visitedPositions;
 
   private ArrayList< Plot > plots;
+  
+  private LocalCrdtStore crdtStore;
+  
+  private GSet<Plot> plotsGset;
 
   private ConcurrentLinkedQueue< ControlCommand > commandQueue;
 
@@ -75,14 +83,30 @@ public class SensorPlatform extends WorldObject implements Runnable {
     this.commandQueue = commandQueue;
     this.plots = new ArrayList< Plot >();
     this.visitedPositions = new ArrayList< Position >();
+    this.crdtStore = new LocalCrdtStore();
+    
   }
 
   @Override
   public void run() {
     // TODO Auto-generated method stub
     Thread thread = Thread.currentThread();
-    logger.info( "Thread " + thread.getName() + " run method." );
+    logger.trace( "Thread " + thread.getName() + " run method." );
     this.currentKinematicState = KinematicState.STARTED;
+    
+    for(SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
+      this.crdtStore.connect( sensor.getCrdtStore() );
+      logger.trace( "Connected " + this.crdtStore + " with " + sensor.getCrdtStore() );
+    }
+    if(this.crdtStore.<Plot>findGSet( "Plots" ).isDefined()) {
+      this.plotsGset = this.crdtStore.<Plot>findGSet( "Plots" ).get();
+      logger.trace( "GSet found: "  + this.plotsGset );
+    } else {
+      this.plotsGset = this.crdtStore.createGSet("Plots");
+      logger.trace( "new GSet generated: " + this.plotsGset );
+    }
+    
+    
     while( keepRunning() ) {
       if( this.commandQueue.peek() != null  ) {
         ControlCommand command = commandQueue.poll();
@@ -91,7 +115,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
           case START_MOVING:
             if( currentKinematicState.equals( KinematicState.STARTED ) ) {
               this.currentKinematicState = KinematicState.MOVING;
-              logger.info( "Sensor Platform " + this.getId() + " starts moving." );
+              logger.trace( "Sensor Platform " + this.getId() + " starts moving." );
             }
             break;
           case STOP_MOVING:
@@ -99,20 +123,20 @@ public class SensorPlatform extends WorldObject implements Runnable {
                 currentKinematicState.equals( KinematicState.STARTED )
                 || currentKinematicState.equals( KinematicState.PAUSED ) ) {
               this.currentKinematicState = KinematicState.FINISHED;
-              logger.info( "Sensor Platform " + this.getId() + " stops moving." );
+              logger.trace( "Sensor Platform " + this.getId() + " stops moving." );
             }
             break;
           case PAUSE_MOVING:
             if( currentKinematicState.equals( KinematicState.STARTED ) || 
                 currentKinematicState.equals( KinematicState.MOVING ) ) {
               this.currentKinematicState = KinematicState.PAUSED;
-              logger.info( "Sensor Platform " + this.getId() + " pauses moving." );
+              logger.trace( "Sensor Platform " + this.getId() + " pauses moving." );
             }
             break;
           case RESUME_MOVING:
             if( currentKinematicState.equals( KinematicState.PAUSED ) ) {
               this.currentKinematicState = KinematicState.MOVING;
-              logger.info( "Sensor Platform " + this.getId() + " resumes moving." );
+              logger.trace( "Sensor Platform " + this.getId() + " resumes moving." );
             }
             break;
           case CONNECT:
@@ -161,7 +185,11 @@ public class SensorPlatform extends WorldObject implements Runnable {
                               target.getPosition(), 
                               target.getType() );
         this.plots.add( plot );
-        logger.info( "Sensor Platform " + this.getId() + ": new Plot: " + plot );
+        this.plotsGset.add( plot );
+        this.world.addFoundTarget( target );
+        target.setHasBeenDetected( true );
+                
+        logger.trace( "Sensor Platform " + this.getId() + ": new Plot: " + plot );
 
       }
     }
@@ -173,21 +201,22 @@ public class SensorPlatform extends WorldObject implements Runnable {
       Position nextPosition = this.positions.get( 0 );
       this.setPosition( nextPosition );
       this.positions.remove( nextPosition );
-      logger.info( "Sensor Platform " + this.getId() + ": new Position: " + this.getPosition() );
+      logger.trace( "Sensor Platform " + this.getId() + ": new Current-Position: " + this.getPosition() );
     } else {
       this.currentKinematicState = KinematicState.FINISHED;
-      logger.info( "Sensor Platform " + this.getId() + " finished." );
+      logger.trace( "Sensor Platform " + this.getId() + " finished." );
+      logger.trace( "Sensor Platform " + this.getId() + " Plots Ratio: " + this.plots.size() + "/" + this.plotsGset.size() );
       doStop();
     }
   }
 
   public void connect() {
-    logger.info( "Sensor Platform " + this.getId() + " connect." );
+    logger.trace( "Sensor Platform " + this.getId() + " connect." );
 
   }
 
   public void disconnect() {
-    logger.info( "Sensor Platform " + this.getId() + " disconnect." );
+    logger.trace( "Sensor Platform " + this.getId() + " disconnect." );
 
   }
 
@@ -316,6 +345,24 @@ public class SensorPlatform extends WorldObject implements Runnable {
    */
   public void setCurrentKinematicState( KinematicState currentKinematicState ) {
     this.currentKinematicState = currentKinematicState;
+  }
+
+  
+  /**
+   * Returns the crdtStore of this SensorPlatform.
+   * @return the crdtStore of this SensorPlatform.
+   */
+  public LocalCrdtStore getCrdtStore() {
+    return crdtStore;
+  }
+
+  
+  /**
+   * Sets the crdtStore of this SensorPlatform.
+   * @param crdtStore the crdtStore to set.
+   */
+  public void setCrdtStore( LocalCrdtStore crdtStore ) {
+    this.crdtStore = crdtStore;
   }
 
 }

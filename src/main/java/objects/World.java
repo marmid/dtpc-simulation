@@ -34,11 +34,14 @@ public class World {
   
   private ArrayList<SensorPlatform> listOfSensorPlatforms;
   
+  private ArrayList<Target> listOfFoundTargets;
+  
   public World(int width, int length) {
     this.width = width;
     this.length = length;
     this.listOfTargets = new ArrayList<Target>();
     this.listOfSensorPlatforms = new ArrayList<SensorPlatform>();
+    this.listOfFoundTargets = new ArrayList<Target>();
   }
 
   
@@ -144,6 +147,15 @@ public class World {
   public synchronized void removeSensorPlatform(SensorPlatform sensorPlatform) {
     this.listOfSensorPlatforms.remove( sensorPlatform );
   }
+  
+  public synchronized void addFoundTarget(Target target) {
+    if(this.listOfFoundTargets.contains( target )) {
+      
+    } else {
+      this.listOfFoundTargets.add( target );
+    }
+    
+  }
 
 
   /** {@inheritDoc} */
@@ -177,6 +189,26 @@ public class World {
         + listOfTargets + ", listOfSensorPlatforms=" 
         + listOfSensorPlatforms
            + "]";
+  }
+
+
+  
+  /**
+   * Returns the listOfFoundTargets of this World.
+   * @return the listOfFoundTargets of this World.
+   */
+  public synchronized ArrayList< Target > getListOfFoundTargets() {
+    return listOfFoundTargets;
+  }
+
+
+  
+  /**
+   * Sets the listOfFoundTargets of this World.
+   * @param listOfFoundTargets the listOfFoundTargets to set.
+   */
+  public synchronized void setListOfFoundTargets( ArrayList< Target > listOfFoundTargets ) {
+    this.listOfFoundTargets = listOfFoundTargets;
   }
 
 }
