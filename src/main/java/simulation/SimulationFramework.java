@@ -50,7 +50,7 @@ public class SimulationFramework {
 
   private static final int SENSOR_AREA_WIDTH = 550;
 
-  private static final int SENSOR_AREA_LENGTH = 150;
+  private static final int SENSOR_AREA_LENGTH = 250;
 
   private static final int SEED = 1614267322;
 
@@ -191,9 +191,11 @@ public class SimulationFramework {
 
   public void startSimulation() {
     for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
-      ControlCommand command = new ControlCommand( sensor, ControlCommandType.START_MOVING );
+      ControlCommand commandSensor = new ControlCommand( sensor, ControlCommandType.ACTIVATE_SENSOR );
+      ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
       ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
-      commandQueue.offer( command );
+      commandQueue.offer( commandSensor );
+      commandQueue.offer( commandKinematic );
     }
   }
 
@@ -209,6 +211,7 @@ public class SimulationFramework {
       // TODO Auto-generated catch block
     } finally {
       int detectedCounter = 0;
+      int undetectedCounter = 0;
       logger.info( "# of detected targets: " + this.world.getListOfFoundTargets().size() );
       logger.info( "# of targets total: " + this.world.getListOfTargets().size() );
       for( Target target : this.world.getListOfFoundTargets() ) {
@@ -217,12 +220,18 @@ public class SimulationFramework {
       for( Target target : this.world.getListOfTargets() ) {
         if( !this.world.getListOfFoundTargets().contains( target ) ) {
 //          logger.info( "Undetected Target: " + target );
+        } else {
+          
         }
         if( target.getHasBeenDetected() ) {
           detectedCounter++;
+        } else {
+          undetectedCounter++;
+          logger.info( target.getPosition().toString() );
         }
       }
       logger.info( "# detectedCounter: " + detectedCounter );
+      logger.info( "# undetectedCounter: " + undetectedCounter );
     }
   }
 

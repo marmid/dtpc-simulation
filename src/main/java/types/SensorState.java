@@ -20,8 +20,8 @@ package main.java.types;
 
 
 /**
- * Defines the class Commands.
+ * Defines the class SensorState.
  */
-public enum ControlCommandType {
-  START_MOVING, PAUSE_MOVING, RESUME_MOVING, STOP_MOVING, CONNECT, DISCONNECT, ACTIVATE_SENSOR, DEACTIVATE_SENSOR;
+public enum SensorState {
+  ON, OFF;
 }
