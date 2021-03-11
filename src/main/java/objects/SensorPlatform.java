@@ -178,6 +178,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
         Thread.sleep( 2000 );
       } catch( InterruptedException e ) {
         e.printStackTrace();
+        logger.error( e.getStackTrace().toString() );
       }
 
     }
