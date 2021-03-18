@@ -29,11 +29,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.netopyr.wurmloch.crdt.GSet;
-import com.netopyr.wurmloch.store.CrdtStore;
 import com.netopyr.wurmloch.store.LocalCrdtStore;
 
-import main.java.simulation.SimulationFramework;
 import main.java.types.ControlCommand;
+import main.java.types.ControlCommandType;
 import main.java.types.KinematicState;
 import main.java.types.ObjectType;
 import main.java.types.Plot;
@@ -92,26 +91,26 @@ public class SensorPlatform extends WorldObject implements Runnable {
 
   @Override
   public void run() {
-    // TODO Auto-generated method stub
     Thread thread = Thread.currentThread();
     logger.trace( "Thread " + thread.getName() + " run method." );
     setCurrentKinematicState( KinematicState.STARTED );
     
-    for(SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
-      this.crdtStore.connect( sensor.getCrdtStore() );
-      logger.trace( "Connected " + this.crdtStore + " with " + sensor.getCrdtStore() );
-    }
-    if(this.crdtStore.<Plot>findGSet( "Plots" ).isDefined()) {
-      this.plotsGset = this.crdtStore.<Plot>findGSet( "Plots" ).get();
-      logger.trace( "GSet found: "  + this.plotsGset );
-    } else {
-      this.plotsGset = this.crdtStore.createGSet("Plots");
-      logger.trace( "new GSet generated: " + this.plotsGset );
-    }
+//    for(SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
+//      this.crdtStore.connect( sensor.getCrdtStore() );
+//      logger.trace( "Connected " + this.crdtStore + " with " + sensor.getCrdtStore() );
+//    }
+    
+//    if(this.crdtStore.<Plot>findGSet( "Plots" ).isDefined()) {
+//      this.plotsGset = this.crdtStore.<Plot>findGSet( "Plots" ).get();
+//      logger.trace( "GSet found: "  + this.plotsGset );
+//    } else {
+//      this.plotsGset = this.crdtStore.createGSet("Plots");
+//      logger.trace( "new GSet generated: " + this.plotsGset );
+//    }
     
     
     while( keepRunning() ) {
-      if( this.commandQueue.peek() != null  ) {
+      while( this.commandQueue.peek() != null  ) {
         ControlCommand command = commandQueue.poll();
         if( command.getCommandTarget().equals( this ) ) {
           switch( command.getCommandType() ) {
@@ -163,6 +162,12 @@ public class SensorPlatform extends WorldObject implements Runnable {
           default:
             break;
           }
+        } else {
+//          if ( command.getCommandType().equals( ControlCommandType.DISCONNECT )) {
+//            disconnect( command.getCommandTarget() );
+//          } else if ( command.getCommandType().equals( ControlCommandType.CONNECT )) {
+//            connect( command.getCommandTarget() );
+//          }
         }
       }
       
@@ -232,14 +237,50 @@ public class SensorPlatform extends WorldObject implements Runnable {
   }
 
   public void connect() {
-    logger.trace( "Sensor Platform " + this.getId() + " connect." );
-
+    for (SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
+      if( !this.equals( sensor ) ) {
+        this.crdtStore.connect( sensor.getCrdtStore() );
+        logger.trace( "Sensor Platform " + this.getId() + " connected to SensorPlatform " + sensor.getId() + "." );
+      }
+    }
+    if(this.plotsGset == null) {
+      if(this.crdtStore.<Plot>findGSet( "Plots" ).isDefined()) {
+        this.plotsGset = this.crdtStore.<Plot>findGSet( "Plots" ).get();
+        logger.trace( "SensorPlatform " + this.getId() + " GSet found: "  + this.plotsGset );
+      } else {
+        this.plotsGset = this.crdtStore.createGSet("Plots");
+        logger.trace( "SensorPlatform " + this.getId() + " new GSet generated: " + this.plotsGset );
+      }
+    }
   }
+  
+//  public void connect(SensorPlatform sensor) {
+//    this.crdtStore.connect( sensor.getCrdtStore() );
+//    if(this.plotsGset == null) {
+//      if(this.crdtStore.<Plot>findGSet( "Plots" ).isDefined()) {
+//        this.plotsGset = this.crdtStore.<Plot>findGSet( "Plots" ).get();
+//        logger.trace( "SensorPlatform " + this.getId() + " GSet found: "  + this.plotsGset );
+//      } else {
+//        this.plotsGset = this.crdtStore.createGSet("Plots");
+//        logger.trace( "SensorPlatform " + this.getId() + " new GSet generated: " + this.plotsGset );
+//      }
+//    }
+//    logger.trace( "Sensor Platform " + this.getId() + " connected to SensorPlatform " + sensor.getId() + "." );
+//  }
 
   public void disconnect() {
-    logger.trace( "Sensor Platform " + this.getId() + " disconnect." );
-
+    for ( SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
+      if( !this.equals( sensor ) ) {
+        this.crdtStore.disconnect( sensor.getCrdtStore() );
+        logger.trace( "Sensor Platform " + this.getId() + " disconnected from SensorPlatform " + sensor.getId() + "." );
+      }
+    }
   }
+  
+//  public void disconnect(SensorPlatform sensor) {
+//    this.crdtStore.disconnect( sensor.getCrdtStore() );
+//    logger.trace( "Sensor Platform " + this.getId() + " disconnected from SensorPlatform " + sensor.getId() + "." );
+//  }
 
   public synchronized void doStop() {
     this.doStop = true;
@@ -373,7 +414,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * Returns the crdtStore of this SensorPlatform.
    * @return the crdtStore of this SensorPlatform.
    */
-  public LocalCrdtStore getCrdtStore() {
+  public synchronized LocalCrdtStore getCrdtStore() {
     return crdtStore;
   }
 
@@ -382,7 +423,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
    * Sets the crdtStore of this SensorPlatform.
    * @param crdtStore the crdtStore to set.
    */
-  public void setCrdtStore( LocalCrdtStore crdtStore ) {
+  public synchronized void setCrdtStore( LocalCrdtStore crdtStore ) {
     this.crdtStore = crdtStore;
   }
 

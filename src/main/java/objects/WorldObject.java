@@ -74,7 +74,7 @@ public class WorldObject {
    * Returns the id of this WorldObject.
    * @return the id of this WorldObject.
    */
-  public UUID getId() {
+  public synchronized UUID getId() {
     return id;
   }
 
@@ -83,7 +83,7 @@ public class WorldObject {
    * Sets the id of this WorldObject.
    * @param id the id to set.
    */
-  public void setId( UUID id ) {
+  public synchronized void setId( UUID id ) {
     this.id = id;
   }
 

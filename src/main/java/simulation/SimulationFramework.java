@@ -69,13 +69,12 @@ public class SimulationFramework {
   private ArrayList< Thread > listOfThreads;
 
   public SimulationFramework() {
-
-  }
-
-  public void init() {
     this.random = new Random( SEED );
     this.listOfCommandQueues = new ArrayList< ConcurrentLinkedQueue< ControlCommand > >();
     this.listOfThreads = new ArrayList< Thread >();
+  }
+
+  public void init() {
     createWorld( WORLD_WIDTH, WORLD_LENGTH );
     createTargets();
     createSensorPlatforms();
@@ -191,11 +190,26 @@ public class SimulationFramework {
 
   public void startSimulation() {
     for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
+      ControlCommand commandCrdt = new ControlCommand( sensor, ControlCommandType.CONNECT );
       ControlCommand commandSensor = new ControlCommand( sensor, ControlCommandType.ACTIVATE_SENSOR );
       ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
       ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
+      commandQueue.offer( commandCrdt );
       commandQueue.offer( commandSensor );
       commandQueue.offer( commandKinematic );
+    }
+
+    if( storyBook != null ) {
+      for( ControlCommand command : storyBook ) {
+        command.getCommandTarget().getCommandQueue().offer( command );
+
+        try {
+          Thread.sleep( 1000 );
+        } catch( InterruptedException e ) {
+          e.printStackTrace();
+          logger.error( e.getStackTrace().toString() );
+        }
+      }
     }
   }
 
@@ -208,20 +222,20 @@ public class SimulationFramework {
 
       }
     } catch( InterruptedException e ) {
-      // TODO Auto-generated catch block
+      logger.error( e.getStackTrace().toString() );
     } finally {
       int detectedCounter = 0;
       int undetectedCounter = 0;
       logger.info( "# of detected targets: " + this.world.getListOfFoundTargets().size() );
       logger.info( "# of targets total: " + this.world.getListOfTargets().size() );
       for( Target target : this.world.getListOfFoundTargets() ) {
-//        logger.info( "Detected Target: " + target );
+        // logger.info( "Detected Target: " + target );
       }
       for( Target target : this.world.getListOfTargets() ) {
         if( !this.world.getListOfFoundTargets().contains( target ) ) {
-//          logger.info( "Undetected Target: " + target );
+          // logger.info( "Undetected Target: " + target );
         } else {
-          
+
         }
         if( target.getHasBeenDetected() ) {
           detectedCounter++;
