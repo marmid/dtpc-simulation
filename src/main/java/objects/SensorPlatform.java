@@ -163,11 +163,11 @@ public class SensorPlatform extends WorldObject implements Runnable {
             break;
           }
         } else {
-//          if ( command.getCommandType().equals( ControlCommandType.DISCONNECT )) {
-//            disconnect( command.getCommandTarget() );
-//          } else if ( command.getCommandType().equals( ControlCommandType.CONNECT )) {
-//            connect( command.getCommandTarget() );
-//          }
+          if ( command.getCommandType().equals( ControlCommandType.DISCONNECT )) {
+            disconnect( command.getCommandTarget() );
+          } else if ( command.getCommandType().equals( ControlCommandType.CONNECT )) {
+            connect( command.getCommandTarget() );
+          }
         }
       }
       
@@ -254,19 +254,19 @@ public class SensorPlatform extends WorldObject implements Runnable {
     }
   }
   
-//  public void connect(SensorPlatform sensor) {
-//    this.crdtStore.connect( sensor.getCrdtStore() );
-//    if(this.plotsGset == null) {
-//      if(this.crdtStore.<Plot>findGSet( "Plots" ).isDefined()) {
-//        this.plotsGset = this.crdtStore.<Plot>findGSet( "Plots" ).get();
-//        logger.trace( "SensorPlatform " + this.getId() + " GSet found: "  + this.plotsGset );
-//      } else {
-//        this.plotsGset = this.crdtStore.createGSet("Plots");
-//        logger.trace( "SensorPlatform " + this.getId() + " new GSet generated: " + this.plotsGset );
-//      }
-//    }
-//    logger.trace( "Sensor Platform " + this.getId() + " connected to SensorPlatform " + sensor.getId() + "." );
-//  }
+  public void connect(SensorPlatform sensor) {
+    this.crdtStore.connect( sensor.getCrdtStore() );
+    if(this.plotsGset == null) {
+      if(this.crdtStore.<Plot>findGSet( "Plots" ).isDefined()) {
+        this.plotsGset = this.crdtStore.<Plot>findGSet( "Plots" ).get();
+        logger.trace( "SensorPlatform " + this.getId() + " GSet found: "  + this.plotsGset );
+      } else {
+        this.plotsGset = this.crdtStore.createGSet("Plots");
+        logger.trace( "SensorPlatform " + this.getId() + " new GSet generated: " + this.plotsGset );
+      }
+    }
+    logger.trace( "Sensor Platform " + this.getId() + " connected to SensorPlatform " + sensor.getId() + "." );
+  }
 
   public void disconnect() {
     for ( SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
@@ -277,10 +277,10 @@ public class SensorPlatform extends WorldObject implements Runnable {
     }
   }
   
-//  public void disconnect(SensorPlatform sensor) {
-//    this.crdtStore.disconnect( sensor.getCrdtStore() );
-//    logger.trace( "Sensor Platform " + this.getId() + " disconnected from SensorPlatform " + sensor.getId() + "." );
-//  }
+  public void disconnect(SensorPlatform sensor) {
+    this.crdtStore.disconnect( sensor.getCrdtStore() );
+    logger.trace( "Sensor Platform " + this.getId() + " disconnected from SensorPlatform " + sensor.getId() + "." );
+  }
 
   public synchronized void doStop() {
     this.doStop = true;

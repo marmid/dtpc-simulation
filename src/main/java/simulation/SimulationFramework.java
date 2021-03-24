@@ -46,7 +46,7 @@ public class SimulationFramework {
 
   private static final int NUMBER_OF_TARGETS = 100;
 
-  private static final int NUMBER_OF_SENSOR_PLATFORMS = 3;
+  private static final int NUMBER_OF_SENSOR_PLATFORMS = 5;
 
   private static final int SENSOR_AREA_WIDTH = 550;
 
@@ -55,6 +55,8 @@ public class SimulationFramework {
   private static final int SEED = 1614267322;
 
   private static final int RANDOM_MINIMUM = 0;
+  
+  private static int szenarioNo = 1;
 
   private static Logger logger = LoggerFactory.getLogger( SimulationFramework.class );
 
@@ -95,88 +97,36 @@ public class SimulationFramework {
   }
 
   public void createSensorPlatforms() {
-
-    /*
-     * create first sensor platform
-     */
-    ArrayList< Position > positions1 = new ArrayList<>();
-    positions1.add( new Position( 250, 200 ) );
-    positions1.add( new Position( 250, 400 ) );
-    positions1.add( new Position( 250, 600 ) );
-    positions1.add( new Position( 250, 800 ) );
-    positions1.add( new Position( 250, 1000 ) );
-    positions1.add( new Position( 250, 1200 ) );
-    positions1.add( new Position( 250, 1400 ) );
-    positions1.add( new Position( 250, 1600 ) );
-    positions1.add( new Position( 250, 1800 ) );
-    positions1.add( new Position( 250, 2000 ) );
-    positions1.add( new Position( 250, 2200 ) );
-    positions1.add( new Position( 250, 2400 ) );
-    positions1.add( new Position( 250, 2600 ) );
-    positions1.add( new Position( 250, 2800 ) );
-    positions1.add( new Position( 250, 3000 ) );
-
-    ConcurrentLinkedQueue< ControlCommand > commandQueue1 = new ConcurrentLinkedQueue<>();
-    this.listOfCommandQueues.add( commandQueue1 );
-    SensorPlatform sensor1 = new SensorPlatform( this.world, getID(), new Position( 250, 0 ), ObjectType.SENSOR,
-                                                 new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), positions1, commandQueue1 );
-    this.world.addSensorPlatform( sensor1 );
-    logger.trace( "New SensorPlatform created: " + sensor1.toString() );
-
-    /*
-     * create second sensor platform
-     */
-    ArrayList< Position > positions2 = new ArrayList<>();
-    positions2.add( new Position( 500, 200 ) );
-    positions2.add( new Position( 500, 400 ) );
-    positions2.add( new Position( 500, 600 ) );
-    positions2.add( new Position( 500, 800 ) );
-    positions2.add( new Position( 500, 1000 ) );
-    positions2.add( new Position( 500, 1200 ) );
-    positions2.add( new Position( 500, 1400 ) );
-    positions2.add( new Position( 500, 1600 ) );
-    positions2.add( new Position( 500, 1800 ) );
-    positions2.add( new Position( 500, 2000 ) );
-    positions2.add( new Position( 500, 2200 ) );
-    positions2.add( new Position( 500, 2400 ) );
-    positions2.add( new Position( 500, 2600 ) );
-    positions2.add( new Position( 500, 2800 ) );
-    positions2.add( new Position( 500, 3000 ) );
-
-    ConcurrentLinkedQueue< ControlCommand > commandQueue2 = new ConcurrentLinkedQueue<>();
-    this.listOfCommandQueues.add( commandQueue2 );
-    SensorPlatform sensor2 = new SensorPlatform( this.world, getID(), new Position( 500, 0 ), ObjectType.SENSOR,
-                                                 new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), positions2, commandQueue2 );
-    this.world.addSensorPlatform( sensor2 );
-    logger.trace( "New SensorPlatform created: " + sensor2.toString() );
-
-    /*
-     * create third sensor platform
-     */
-    ArrayList< Position > positions3 = new ArrayList<>();
-    positions3.add( new Position( 750, 200 ) );
-    positions3.add( new Position( 750, 400 ) );
-    positions3.add( new Position( 750, 600 ) );
-    positions3.add( new Position( 750, 800 ) );
-    positions3.add( new Position( 750, 1000 ) );
-    positions3.add( new Position( 750, 1200 ) );
-    positions3.add( new Position( 750, 1400 ) );
-    positions3.add( new Position( 750, 1600 ) );
-    positions3.add( new Position( 750, 1800 ) );
-    positions3.add( new Position( 750, 2000 ) );
-    positions3.add( new Position( 750, 2200 ) );
-    positions3.add( new Position( 750, 2400 ) );
-    positions3.add( new Position( 750, 2600 ) );
-    positions3.add( new Position( 750, 2800 ) );
-    positions3.add( new Position( 750, 3000 ) );
-
-    ConcurrentLinkedQueue< ControlCommand > commandQueue3 = new ConcurrentLinkedQueue<>();
-    this.listOfCommandQueues.add( commandQueue3 );
-    SensorPlatform sensor3 = new SensorPlatform( this.world, getID(), new Position( 750, 0 ), ObjectType.SENSOR,
-                                                 new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), positions3, commandQueue3 );
-    this.world.addSensorPlatform( sensor3 );
-    logger.trace( "New SensorPlatform created: " + sensor3.toString() );
-
+    
+    double xAxisOffset = this.world.getWidth() / (NUMBER_OF_SENSOR_PLATFORMS + 1);
+    
+    for (int i = 0; i < NUMBER_OF_SENSOR_PLATFORMS; i++) {
+      int xOffset = (int)((i+1) * xAxisOffset);
+      ArrayList< Position > positions = new ArrayList<>();
+      positions.add( new Position( xOffset, 200 ) );
+      positions.add( new Position( xOffset, 400 ) );
+      positions.add( new Position( xOffset, 600 ) );
+      positions.add( new Position( xOffset, 800 ) );
+      positions.add( new Position( xOffset, 1000 ) );
+      positions.add( new Position( xOffset, 1200 ) );
+      positions.add( new Position( xOffset, 1400 ) );
+      positions.add( new Position( xOffset, 1600 ) );
+      positions.add( new Position( xOffset, 1800 ) );
+      positions.add( new Position( xOffset, 2000 ) );
+      positions.add( new Position( xOffset, 2200 ) );
+      positions.add( new Position( xOffset, 2400 ) );
+      positions.add( new Position( xOffset, 2600 ) );
+      positions.add( new Position( xOffset, 2800 ) );
+      positions.add( new Position( xOffset, 3000 ) );
+      
+      ConcurrentLinkedQueue< ControlCommand > commandQueue = new ConcurrentLinkedQueue<>();
+      this.listOfCommandQueues.add( commandQueue );
+      SensorPlatform sensor = new SensorPlatform( this.world, getID(), new Position( xOffset, 0 ), ObjectType.SENSOR,
+                                                   new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), positions, commandQueue );
+      this.world.addSensorPlatform( sensor );
+      logger.trace( "New SensorPlatform created: " + sensor.toString() );
+      
+    }
   }
 
   public void startSensorPlatformThreads() {
@@ -189,27 +139,32 @@ public class SimulationFramework {
   }
 
   public void startSimulation() {
-    for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
-      ControlCommand commandCrdt = new ControlCommand( sensor, ControlCommandType.CONNECT );
-      ControlCommand commandSensor = new ControlCommand( sensor, ControlCommandType.ACTIVATE_SENSOR );
-      ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
-      ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
-      commandQueue.offer( commandCrdt );
-      commandQueue.offer( commandSensor );
-      commandQueue.offer( commandKinematic );
-    }
-
-    if( storyBook != null ) {
-      for( ControlCommand command : storyBook ) {
-        command.getCommandTarget().getCommandQueue().offer( command );
-
-        try {
-          Thread.sleep( 1000 );
-        } catch( InterruptedException e ) {
-          e.printStackTrace();
-          logger.error( e.getStackTrace().toString() );
+    if( szenarioNo == 1 ) {
+      for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
+        ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
+        for ( SensorPlatform sensor2 : this.world.getListOfSensorPlatforms()) {
+          if (!sensor.equals( sensor2 )) {
+            ControlCommand commandCrdt = new ControlCommand( sensor2, ControlCommandType.CONNECT );
+            commandQueue.offer( commandCrdt );
+          }
         }
-      }
+        ControlCommand commandSensor = new ControlCommand( sensor, ControlCommandType.ACTIVATE_SENSOR );
+        ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
+        commandQueue.offer( commandSensor );
+        commandQueue.offer( commandKinematic );
+      } 
+    } else if ( szenarioNo == 2 ) {
+      
+    } else if ( szenarioNo == 3 ) {
+      
+    } else if ( szenarioNo == 4 ) {
+      
+    } else if ( szenarioNo == 5 ) {
+      
+    } else if ( szenarioNo == 6 ) {
+      
+    } else if ( szenarioNo == 7 ) {
+      
     }
   }
 
