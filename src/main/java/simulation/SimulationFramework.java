@@ -31,6 +31,7 @@ import main.java.objects.Target;
 import main.java.objects.World;
 import main.java.types.ControlCommand;
 import main.java.types.ControlCommandType;
+import main.java.types.KinematicState;
 import main.java.types.ObjectType;
 import main.java.types.Position;
 import main.java.types.SensorArea;
@@ -55,8 +56,8 @@ public class SimulationFramework {
   private static final int SEED = 1614267322;
 
   private static final int RANDOM_MINIMUM = 0;
-  
-  private static int szenarioNo = 1;
+
+  private static int szenarioNo = 2;
 
   private static Logger logger = LoggerFactory.getLogger( SimulationFramework.class );
 
@@ -77,6 +78,7 @@ public class SimulationFramework {
   }
 
   public void init() {
+    logger.trace( "SimulationFramework - Simulation Scenario: " + szenarioNo );
     createWorld( WORLD_WIDTH, WORLD_LENGTH );
     createTargets();
     createSensorPlatforms();
@@ -97,11 +99,11 @@ public class SimulationFramework {
   }
 
   public void createSensorPlatforms() {
-    
+
     double xAxisOffset = this.world.getWidth() / (NUMBER_OF_SENSOR_PLATFORMS + 1);
-    
-    for (int i = 0; i < NUMBER_OF_SENSOR_PLATFORMS; i++) {
-      int xOffset = (int)((i+1) * xAxisOffset);
+
+    for( int i = 0; i < NUMBER_OF_SENSOR_PLATFORMS; i++ ) {
+      int xOffset = (int)((i + 1) * xAxisOffset);
       ArrayList< Position > positions = new ArrayList<>();
       positions.add( new Position( xOffset, 200 ) );
       positions.add( new Position( xOffset, 400 ) );
@@ -118,14 +120,14 @@ public class SimulationFramework {
       positions.add( new Position( xOffset, 2600 ) );
       positions.add( new Position( xOffset, 2800 ) );
       positions.add( new Position( xOffset, 3000 ) );
-      
+
       ConcurrentLinkedQueue< ControlCommand > commandQueue = new ConcurrentLinkedQueue<>();
       this.listOfCommandQueues.add( commandQueue );
       SensorPlatform sensor = new SensorPlatform( this.world, getID(), new Position( xOffset, 0 ), ObjectType.SENSOR,
-                                                   new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), positions, commandQueue );
+                                                  new SensorArea( SENSOR_AREA_WIDTH, SENSOR_AREA_LENGTH ), positions, commandQueue );
       this.world.addSensorPlatform( sensor );
       logger.trace( "New SensorPlatform created: " + sensor.toString() );
-      
+
     }
   }
 
@@ -142,8 +144,8 @@ public class SimulationFramework {
     if( szenarioNo == 1 ) {
       for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
         ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
-        for ( SensorPlatform sensor2 : this.world.getListOfSensorPlatforms()) {
-          if (!sensor.equals( sensor2 )) {
+        for( SensorPlatform sensor2 : this.world.getListOfSensorPlatforms() ) {
+          if( !sensor.equals( sensor2 ) ) {
             ControlCommand commandCrdt = new ControlCommand( sensor2, ControlCommandType.CONNECT );
             commandQueue.offer( commandCrdt );
           }
@@ -152,20 +154,86 @@ public class SimulationFramework {
         ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
         commandQueue.offer( commandSensor );
         commandQueue.offer( commandKinematic );
-      } 
-    } else if ( szenarioNo == 2 ) {
+      }
+    } else if( szenarioNo == 2 ) {
+      for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
+        ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
+        for( SensorPlatform sensor2 : this.world.getListOfSensorPlatforms() ) {
+          if( !sensor.equals( sensor2 ) ) {
+            ControlCommand commandCrdt = new ControlCommand( sensor2, ControlCommandType.CONNECT );
+            commandQueue.offer( commandCrdt );
+          }
+        }
+        ControlCommand commandSensor = new ControlCommand( sensor, ControlCommandType.ACTIVATE_SENSOR );
+        ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
+        commandQueue.offer( commandSensor );
+        commandQueue.offer( commandKinematic );
+      }
       
-    } else if ( szenarioNo == 3 ) {
+      Thread thisThread = Thread.currentThread();
+      try {
+        thisThread.sleep( 6000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+      ArrayList<SensorPlatform> sensorList = this.world.getListOfSensorPlatforms();
+      SensorPlatform sensor4 = sensorList.get( sensorList.size()-2 );
+      ConcurrentLinkedQueue< ControlCommand > commandQueue4 = sensor4.getCommandQueue();
+      SensorPlatform sensor5 = sensorList.get( sensorList.size()-1 );
+      ConcurrentLinkedQueue< ControlCommand > commandQueue5 = sensor5.getCommandQueue();
       
-    } else if ( szenarioNo == 4 ) {
+      ControlCommand commandCrdt4 = new ControlCommand( sensor4, ControlCommandType.DISCONNECT );
+      ControlCommand commandSensor4 = new ControlCommand( sensor4, ControlCommandType.DEACTIVATE_SENSOR );
+      ControlCommand commandKinematic4 = new ControlCommand( sensor4, ControlCommandType.STOP_MOVING );
+      commandQueue4.offer( commandCrdt4 );
+      commandQueue4.offer( commandSensor4 );
+      commandQueue4.offer( commandKinematic4 );
       
-    } else if ( szenarioNo == 5 ) {
+      ControlCommand commandCrdt5 = new ControlCommand( sensor5, ControlCommandType.DISCONNECT );
+      ControlCommand commandSensor5 = new ControlCommand( sensor5, ControlCommandType.DEACTIVATE_SENSOR );
+      ControlCommand commandKinematic5 = new ControlCommand( sensor5, ControlCommandType.STOP_MOVING );
+      commandQueue5.offer( commandCrdt5 );
+      commandQueue5.offer( commandSensor5 );
+      commandQueue5.offer( commandKinematic5 );
       
-    } else if ( szenarioNo == 6 ) {
-      
-    } else if ( szenarioNo == 7 ) {
-      
+
+    } else if( szenarioNo == 3 ) {
+
+    } else if( szenarioNo == 4 ) {
+
+    } else if( szenarioNo == 5 ) {
+
+    } else if( szenarioNo == 6 ) {
+
+    } else if( szenarioNo == 7 ) {
+
+    } else if( szenarioNo == 8 ) {
+
     }
+
+    boolean allSensorsFinished = false;
+    while( allSensorsFinished == false ) {
+      int finishedSensors = 0;
+
+      for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
+        if( sensor.getCurrentKinematicState().equals( KinematicState.FINISHED ) ) {
+          finishedSensors++;
+        }
+      }
+
+      if( finishedSensors == this.world.getListOfSensorPlatforms().size() ) {
+
+        for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
+          if( sensor.getCurrentKinematicState().equals( KinematicState.FINISHED ) ) {
+            sensor.doStop();
+          }
+        }
+
+        allSensorsFinished = true;
+        logger.trace( "All Sensors finished! Shutting down." );
+      }
+    }
+
   }
 
   public void joinThreads() {

@@ -232,7 +232,6 @@ public class SensorPlatform extends WorldObject implements Runnable {
     } else {
       setCurrentKinematicState( KinematicState.FINISHED );
       logger.trace( "Sensor Platform " + this.getId() + " finished." );
-      doStop();
     }
   }
 
