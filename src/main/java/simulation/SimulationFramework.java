@@ -169,30 +169,73 @@ public class SimulationFramework {
         commandQueue.offer( commandSensor );
         commandQueue.offer( commandKinematic );
       }
-      
+
       Thread thisThread = Thread.currentThread();
       try {
         thisThread.sleep( 6000 );
       } catch( InterruptedException e ) {
         logger.error( e.getStackTrace().toString() );
       }
-      ArrayList<SensorPlatform> sensorList = this.world.getListOfSensorPlatforms();
-      SensorPlatform sensor4 = sensorList.get( sensorList.size()-2 );
+      ArrayList< SensorPlatform > sensorList = this.world.getListOfSensorPlatforms();
+      // SensorPlatform sensor4 = sensorList.get( sensorList.size()-2 );
+      // ConcurrentLinkedQueue< ControlCommand > commandQueue4 =
+      // sensor4.getCommandQueue();
+      // SensorPlatform sensor5 = sensorList.get( sensorList.size()-1 );
+      // ConcurrentLinkedQueue< ControlCommand > commandQueue5 =
+      // sensor5.getCommandQueue();
+      //
+      // ControlCommand commandCrdt4 = new ControlCommand( sensor4,
+      // ControlCommandType.DISCONNECT );
+      // ControlCommand commandSensor4 = new ControlCommand( sensor4,
+      // ControlCommandType.DEACTIVATE_SENSOR );
+      // ControlCommand commandKinematic4 = new ControlCommand( sensor4,
+      // ControlCommandType.STOP_MOVING );
+      // commandQueue4.offer( commandCrdt4 );
+      // commandQueue4.offer( commandSensor4 );
+      // commandQueue4.offer( commandKinematic4 );
+      //
+      // ControlCommand commandCrdt5 = new ControlCommand( sensor5,
+      // ControlCommandType.DISCONNECT );
+      // ControlCommand commandSensor5 = new ControlCommand( sensor5,
+      // ControlCommandType.DEACTIVATE_SENSOR );
+      // ControlCommand commandKinematic5 = new ControlCommand( sensor5,
+      // ControlCommandType.STOP_MOVING );
+      // commandQueue5.offer( commandCrdt5 );
+      // commandQueue5.offer( commandSensor5 );
+      // commandQueue5.offer( commandKinematic5 );
+
+      SensorPlatform sensor1 = sensorList.get( 0 );
+      SensorPlatform sensor2 = sensorList.get( 1 );
+      SensorPlatform sensor3 = sensorList.get( 2 );
+      SensorPlatform sensor4 = sensorList.get( 3 );
+      SensorPlatform sensor5 = sensorList.get( 4 );
+
       ConcurrentLinkedQueue< ControlCommand > commandQueue4 = sensor4.getCommandQueue();
-      SensorPlatform sensor5 = sensorList.get( sensorList.size()-1 );
       ConcurrentLinkedQueue< ControlCommand > commandQueue5 = sensor5.getCommandQueue();
-      
-      ControlCommand commandCrdt4 = new ControlCommand( sensor4, ControlCommandType.DISCONNECT );
+
+      ControlCommand disconnectfrom1 = new ControlCommand( sensor1, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom2 = new ControlCommand( sensor2, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom3 = new ControlCommand( sensor3, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom4 = new ControlCommand( sensor4, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom5 = new ControlCommand( sensor5, ControlCommandType.DISCONNECT );
+
       ControlCommand commandSensor4 = new ControlCommand( sensor4, ControlCommandType.DEACTIVATE_SENSOR );
       ControlCommand commandKinematic4 = new ControlCommand( sensor4, ControlCommandType.STOP_MOVING );
-      commandQueue4.offer( commandCrdt4 );
+
+      ControlCommand commandSensor5 = new ControlCommand( sensor5, ControlCommandType.DEACTIVATE_SENSOR );
+      ControlCommand commandKinematic5 = new ControlCommand( sensor5, ControlCommandType.STOP_MOVING );
+      
+      commandQueue4.offer( disconnectfrom1 );
+      commandQueue4.offer( disconnectfrom2 );
+      commandQueue4.offer( disconnectfrom3 );
+      commandQueue4.offer( disconnectfrom5 );
       commandQueue4.offer( commandSensor4 );
       commandQueue4.offer( commandKinematic4 );
       
-      ControlCommand commandCrdt5 = new ControlCommand( sensor5, ControlCommandType.DISCONNECT );
-      ControlCommand commandSensor5 = new ControlCommand( sensor5, ControlCommandType.DEACTIVATE_SENSOR );
-      ControlCommand commandKinematic5 = new ControlCommand( sensor5, ControlCommandType.STOP_MOVING );
-      commandQueue5.offer( commandCrdt5 );
+      commandQueue5.offer( disconnectfrom1 );
+      commandQueue5.offer( disconnectfrom2 );
+      commandQueue5.offer( disconnectfrom3 );
+      commandQueue5.offer( disconnectfrom4 );
       commandQueue5.offer( commandSensor5 );
       commandQueue5.offer( commandKinematic5 );
       
@@ -232,6 +275,7 @@ public class SimulationFramework {
         allSensorsFinished = true;
         logger.trace( "All Sensors finished! Shutting down." );
       }
+
     }
 
   }
@@ -247,28 +291,36 @@ public class SimulationFramework {
     } catch( InterruptedException e ) {
       logger.error( e.getStackTrace().toString() );
     } finally {
-      int detectedCounter = 0;
-      int undetectedCounter = 0;
+      // int detectedCounter = 0;
+      // int undetectedCounter = 0;
       logger.info( "# of detected targets: " + this.world.getListOfFoundTargets().size() );
       logger.info( "# of targets total: " + this.world.getListOfTargets().size() );
-      for( Target target : this.world.getListOfFoundTargets() ) {
-        // logger.info( "Detected Target: " + target );
-      }
-      for( Target target : this.world.getListOfTargets() ) {
-        if( !this.world.getListOfFoundTargets().contains( target ) ) {
-          // logger.info( "Undetected Target: " + target );
-        } else {
+      // for( Target target : this.world.getListOfFoundTargets() ) {
+      // // logger.info( "Detected Target: " + target );
+      // }
+      // for( Target target : this.world.getListOfTargets() ) {
+      // if( !this.world.getListOfFoundTargets().contains( target ) ) {
+      // // logger.info( "Undetected Target: " + target );
+      // } else {
+      //
+      // }
+      // if( target.getHasBeenDetected() ) {
+      // detectedCounter++;
+      // } else {
+      // undetectedCounter++;
+      // logger.info( target.getPosition().toString() );
+      // }
+      // }
+      // logger.info( "# detectedCounter: " + detectedCounter );
+      // logger.info( "# undetectedCounter: " + undetectedCounter );
 
-        }
-        if( target.getHasBeenDetected() ) {
-          detectedCounter++;
-        } else {
-          undetectedCounter++;
-          logger.info( target.getPosition().toString() );
-        }
-      }
-      logger.info( "# detectedCounter: " + detectedCounter );
-      logger.info( "# undetectedCounter: " + undetectedCounter );
+      // //Clear GSets
+      // for(SensorPlatform sensor : this.world.getListOfSensorPlatforms()) {
+      // sensor.getPlotsGset().removeAll( sensor.getPlots() );
+      // logger.trace( sensor.getId() + " cleared GSet. # of Plots in Gset: " +
+      // sensor.getPlotsGset().size() );
+      // }
+
     }
   }
 

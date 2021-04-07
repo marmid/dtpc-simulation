@@ -188,7 +188,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
 
     }
     
-    logger.trace( "Sensor Platform " + this.getId() + " Plots Ratio: " + this.plots.size() + "/" + this.plotsGset.size() );
+    logger.trace( "Sensor Platform " + this.getId() + " Plots Ratio: " + this.getPlots().size() + "/" + this.getPlotsGset().size() );
 
   }
 
@@ -442,6 +442,24 @@ public class SensorPlatform extends WorldObject implements Runnable {
    */
   public synchronized void setCurrentSensorState( SensorState currentSensorState ) {
     this.currentSensorState = currentSensorState;
+  }
+
+  
+  /**
+   * Returns the plotsGset of this SensorPlatform.
+   * @return the plotsGset of this SensorPlatform.
+   */
+  public synchronized GSet< Plot > getPlotsGset() {
+    return plotsGset;
+  }
+
+  
+  /**
+   * Sets the plotsGset of this SensorPlatform.
+   * @param plotsGset the plotsGset to set.
+   */
+  public synchronized void setPlotsGset( GSet< Plot > plotsGset ) {
+    this.plotsGset = plotsGset;
   }
 
 }
