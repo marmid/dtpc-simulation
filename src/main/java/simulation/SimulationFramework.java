@@ -241,8 +241,184 @@ public class SimulationFramework {
       
 
     } else if( szenarioNo == 3 ) {
+      for( SensorPlatform sensor : this.world.getListOfSensorPlatforms() ) {
+        ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
+        for( SensorPlatform sensor2 : this.world.getListOfSensorPlatforms() ) {
+          if( !sensor.equals( sensor2 ) ) {
+            ControlCommand commandCrdt = new ControlCommand( sensor2, ControlCommandType.CONNECT );
+            commandQueue.offer( commandCrdt );
+          }
+        }
+        ControlCommand commandSensor = new ControlCommand( sensor, ControlCommandType.ACTIVATE_SENSOR );
+        ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
+        commandQueue.offer( commandSensor );
+        commandQueue.offer( commandKinematic );
+      }
+
+      Thread thisThread = Thread.currentThread();
+      try {
+        thisThread.sleep( 6000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+      
+      ArrayList< SensorPlatform > sensorList = this.world.getListOfSensorPlatforms();
+      
+      SensorPlatform sensor1 = sensorList.get( 0 );
+      SensorPlatform sensor2 = sensorList.get( 1 );
+      SensorPlatform sensor3 = sensorList.get( 2 );
+      SensorPlatform sensor4 = sensorList.get( 3 );
+      SensorPlatform sensor5 = sensorList.get( 4 );
+
+      ConcurrentLinkedQueue< ControlCommand > commandQueue4 = sensor4.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue5 = sensor5.getCommandQueue();
+
+      ControlCommand disconnectfrom1 = new ControlCommand( sensor1, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom2 = new ControlCommand( sensor2, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom3 = new ControlCommand( sensor3, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom4 = new ControlCommand( sensor4, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom5 = new ControlCommand( sensor5, ControlCommandType.DISCONNECT );
+      
+      commandQueue4.offer( disconnectfrom1 );
+      commandQueue4.offer( disconnectfrom2 );
+      commandQueue4.offer( disconnectfrom3 );
+      
+      commandQueue5.offer( disconnectfrom1 );
+      commandQueue5.offer( disconnectfrom2 );
+      commandQueue5.offer( disconnectfrom3 );
+      
+      try {
+        thisThread.sleep( 6000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+      
+      ControlCommand connectto1 = new ControlCommand( sensor1, ControlCommandType.CONNECT );
+      ControlCommand connectto2 = new ControlCommand( sensor2, ControlCommandType.CONNECT );
+      ControlCommand connectto3 = new ControlCommand( sensor3, ControlCommandType.CONNECT );
+      ControlCommand connectto4 = new ControlCommand( sensor4, ControlCommandType.CONNECT );
+      ControlCommand connectto5 = new ControlCommand( sensor5, ControlCommandType.CONNECT );
+      
+      commandQueue4.offer( connectto1 );
+      commandQueue4.offer( connectto2 );
+      commandQueue4.offer( connectto3 );
+      
+      commandQueue5.offer( connectto1 );
+      commandQueue5.offer( connectto2 );
+      commandQueue5.offer( connectto3 );
 
     } else if( szenarioNo == 4 ) {
+      
+      ArrayList< SensorPlatform > sensorList = this.world.getListOfSensorPlatforms();
+      
+      SensorPlatform sensor1 = sensorList.get( 0 );
+      SensorPlatform sensor2 = sensorList.get( 1 );
+      SensorPlatform sensor3 = sensorList.get( 2 );
+      SensorPlatform sensor4 = sensorList.get( 3 );
+      SensorPlatform sensor5 = sensorList.get( 4 );
+      
+      ConcurrentLinkedQueue< ControlCommand > commandQueue1 = sensor1.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue2 = sensor2.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue3 = sensor3.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue4 = sensor4.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue5 = sensor5.getCommandQueue();
+      
+      ControlCommand disconnectfrom1 = new ControlCommand( sensor1, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom2 = new ControlCommand( sensor2, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom3 = new ControlCommand( sensor3, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom4 = new ControlCommand( sensor4, ControlCommandType.DISCONNECT );
+      ControlCommand disconnectfrom5 = new ControlCommand( sensor5, ControlCommandType.DISCONNECT );
+      
+      ControlCommand connectto1 = new ControlCommand( sensor1, ControlCommandType.CONNECT );
+      ControlCommand connectto2 = new ControlCommand( sensor2, ControlCommandType.CONNECT );
+      ControlCommand connectto3 = new ControlCommand( sensor3, ControlCommandType.CONNECT );
+      ControlCommand connectto4 = new ControlCommand( sensor4, ControlCommandType.CONNECT );
+      ControlCommand connectto5 = new ControlCommand( sensor5, ControlCommandType.CONNECT );
+      
+      commandQueue1.offer(connectto2);
+      commandQueue1.offer(connectto4);
+      commandQueue1.offer(connectto5);
+      
+      commandQueue2.offer(connectto4);
+      commandQueue2.offer(connectto5);
+      
+      commandQueue4.offer(connectto5);      
+      
+      ControlCommand commandSensor1 = new ControlCommand( sensor1, ControlCommandType.ACTIVATE_SENSOR );
+      ControlCommand commandKinematic1 = new ControlCommand( sensor1, ControlCommandType.START_MOVING );
+      commandQueue1.offer( commandSensor1 );
+      commandQueue1.offer( commandKinematic1 );
+      
+      ControlCommand commandSensor2 = new ControlCommand( sensor2, ControlCommandType.ACTIVATE_SENSOR );
+      ControlCommand commandKinematic2 = new ControlCommand( sensor2, ControlCommandType.START_MOVING );
+      commandQueue2.offer( commandSensor2 );
+      commandQueue2.offer( commandKinematic2 );
+      
+      ControlCommand commandSensor3 = new ControlCommand( sensor3, ControlCommandType.DEACTIVATE_SENSOR );
+      ControlCommand commandKinematic3 = new ControlCommand( sensor3, ControlCommandType.START_MOVING );
+      commandQueue3.offer( commandSensor3 );
+      commandQueue3.offer( commandKinematic3 );
+      
+      ControlCommand commandSensor4 = new ControlCommand( sensor4, ControlCommandType.ACTIVATE_SENSOR );
+      ControlCommand commandKinematic4 = new ControlCommand( sensor4, ControlCommandType.START_MOVING );
+      commandQueue4.offer( commandSensor4 );
+      commandQueue4.offer( commandKinematic4 );
+      
+      ControlCommand commandSensor5 = new ControlCommand( sensor5, ControlCommandType.ACTIVATE_SENSOR );
+      ControlCommand commandKinematic5 = new ControlCommand( sensor5, ControlCommandType.START_MOVING );
+      commandQueue5.offer( commandSensor5 );
+      commandQueue5.offer( commandKinematic5 );
+      
+
+      Thread thisThread = Thread.currentThread();
+      try {
+        thisThread.sleep( 4000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+
+      commandQueue4.offer( disconnectfrom1 );
+      commandQueue4.offer( disconnectfrom2 );
+      commandQueue4.offer( disconnectfrom3 );
+      commandQueue4.offer( disconnectfrom5 );
+      
+      
+      try {
+        thisThread.sleep( 2000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+      
+      commandSensor3 = new ControlCommand( sensor3, ControlCommandType.ACTIVATE_SENSOR );
+      commandQueue3.offer( commandSensor3 );
+      commandQueue3.offer( connectto1 );
+      commandQueue3.offer( connectto2 );
+      commandQueue3.offer( connectto5 );
+      
+      try {
+        thisThread.sleep( 4000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+      
+
+      commandQueue3.offer( disconnectfrom1 );
+      commandQueue3.offer( disconnectfrom2 );
+      commandQueue3.offer( disconnectfrom5 );
+      commandSensor3 = new ControlCommand( sensor3, ControlCommandType.DEACTIVATE_SENSOR );
+      commandKinematic3 = new ControlCommand( sensor3, ControlCommandType.STOP_MOVING );
+      commandQueue3.offer( commandSensor3 );
+      commandQueue3.offer( commandKinematic3 );
+      
+      try {
+        thisThread.sleep( 2000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+      
+      commandQueue4.offer( connectto1 );
+      commandQueue4.offer( connectto2 );
+      commandQueue4.offer( connectto5 );
 
     } else if( szenarioNo == 5 ) {
 
