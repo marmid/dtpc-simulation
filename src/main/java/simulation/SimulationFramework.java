@@ -457,6 +457,12 @@ public class SimulationFramework {
   }
 
   public void joinThreads() {
+    
+    try {
+      Thread.currentThread().sleep( 2000 );
+    } catch( InterruptedException e ) {
+      logger.error( e.getStackTrace().toString() );
+    }
 
     try {
       for( Thread t : this.listOfThreads ) {
