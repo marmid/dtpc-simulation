@@ -220,7 +220,14 @@ public class SensorPlatform extends WorldObject implements Runnable {
                               target.getPosition(), 
                               target.getType() );
         this.plots.add( plot );
-        this.getPlotsGset().add( plot );
+        try {
+          this.getPlotsGset().add( plot );
+        } catch (IndexOutOfBoundsException ex) {
+          logger.error( ex.getStackTrace().toString() );
+        } finally {
+          this.getPlotsGset().add( plot );
+        }
+        
         this.world.addFoundTarget( target );
         target.setHasBeenDetected( true );
                 
@@ -239,6 +246,7 @@ public class SensorPlatform extends WorldObject implements Runnable {
       logger.trace( "Sensor Platform " + this.getId() + ": new Current-Position: " + this.getPosition() );
     } else {
       setCurrentKinematicState( KinematicState.FINISHED );
+      setCurrentSensorState( SensorState.OFF );
       logger.trace( "Sensor Platform " + this.getId() + " finished." );
     }
   }

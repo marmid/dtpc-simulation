@@ -57,7 +57,7 @@ public class SimulationFramework {
 
   private static final int RANDOM_MINIMUM = 0;
 
-  private static int szenarioNo = 2;
+  private static int szenarioNo = 5;
 
   private static Logger logger = LoggerFactory.getLogger( SimulationFramework.class );
 
@@ -421,6 +421,62 @@ public class SimulationFramework {
       commandQueue4.offer( connectto5 );
 
     } else if( szenarioNo == 5 ) {
+      
+      ArrayList< SensorPlatform > sensorList = this.world.getListOfSensorPlatforms();
+      
+      SensorPlatform sensor1 = sensorList.get( 0 );
+      SensorPlatform sensor2 = sensorList.get( 1 );
+      SensorPlatform sensor3 = sensorList.get( 2 );
+      SensorPlatform sensor4 = sensorList.get( 3 );
+      SensorPlatform sensor5 = sensorList.get( 4 );
+      
+      ConcurrentLinkedQueue< ControlCommand > commandQueue1 = sensor1.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue2 = sensor2.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue3 = sensor3.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue4 = sensor4.getCommandQueue();
+      ConcurrentLinkedQueue< ControlCommand > commandQueue5 = sensor5.getCommandQueue();
+      
+      ControlCommand connectto1 = new ControlCommand( sensor1, ControlCommandType.CONNECT );
+      ControlCommand connectto2 = new ControlCommand( sensor2, ControlCommandType.CONNECT );
+      ControlCommand connectto3 = new ControlCommand( sensor3, ControlCommandType.CONNECT );
+      ControlCommand connectto4 = new ControlCommand( sensor4, ControlCommandType.CONNECT );
+      ControlCommand connectto5 = new ControlCommand( sensor5, ControlCommandType.CONNECT );
+      
+      commandQueue1.offer( connectto2 );
+      commandQueue1.offer( connectto4 );
+      commandQueue1.offer( connectto5 );
+      
+      commandQueue2.offer( connectto1 );
+      commandQueue2.offer( connectto4 );
+      commandQueue2.offer( connectto5 );
+      
+      commandQueue4.offer( connectto1 );
+      commandQueue4.offer( connectto2 );
+      commandQueue4.offer( connectto5 );
+      
+      commandQueue5.offer( connectto1 );
+      commandQueue5.offer( connectto2 );
+      commandQueue5.offer( connectto4 );
+      
+      for(SensorPlatform sensor : sensorList) {
+        ConcurrentLinkedQueue< ControlCommand > commandQueue = sensor.getCommandQueue();
+        ControlCommand commandSensor = new ControlCommand( sensor, ControlCommandType.ACTIVATE_SENSOR );
+        ControlCommand commandKinematic = new ControlCommand( sensor, ControlCommandType.START_MOVING );
+        commandQueue.offer( commandSensor );
+        commandQueue.offer( commandKinematic );
+      }
+      
+      Thread thisThread = Thread.currentThread();
+      try {
+        thisThread.sleep( 10000 );
+      } catch( InterruptedException e ) {
+        logger.error( e.getStackTrace().toString() );
+      }
+      
+      commandQueue3.offer( connectto1 );
+      commandQueue3.offer( connectto2 );
+      commandQueue3.offer( connectto4 );
+      commandQueue3.offer( connectto5 );
 
     } else if( szenarioNo == 6 ) {
 
@@ -428,7 +484,10 @@ public class SimulationFramework {
 
     } else if( szenarioNo == 8 ) {
 
+    } else if( szenarioNo == 9 ) {
+
     }
+    
 
     boolean allSensorsFinished = false;
     while( allSensorsFinished == false ) {
