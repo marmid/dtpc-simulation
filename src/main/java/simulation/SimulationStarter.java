@@ -31,7 +31,7 @@ public class SimulationStarter {
   private static Logger logger = LoggerFactory.getLogger(SimulationStarter.class);
 
   public static void main( String[] args ) {
-    SimulationFramework simulation = new SimulationFramework();
+    SimulationManager simulation = new SimulationManager();
     simulation.init();
     
     simulation.startSimulation();
